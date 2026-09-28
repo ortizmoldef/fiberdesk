@@ -1,0 +1,103 @@
+<aside class="hidden lg:flex w-64 min-h-screen flex-col border-r border-slate-800 bg-slate-950">
+
+  <!-- Logo -->
+  <div class="flex h-20 items-center border-b border-slate-800 px-6">
+    <div class="flex items-center gap-3">
+
+      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+        <span class="text-xl">◈</span>
+      </div>
+
+      <div>
+        <h1 class="text-lg font-bold text-white">
+          FiberDesk
+        </h1>
+
+        <p class="text-xs text-slate-500">
+          Network Management
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Navigation -->
+  <nav class="flex-1 space-y-2 p-4">
+
+    <p class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+      Principal
+    </p>
+
+    <a
+        routerLink="/dashboard"
+        routerLinkActive="bg-cyan-500/10 text-cyan-400"
+        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+    >
+      <span class="text-lg">▦</span>
+      Dashboard
+    </a>
+
+    <a
+      routerLink="/clients"
+      routerLinkActive="bg-cyan-500/10 text-cyan-400"
+      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+    >
+      <span class="text-lg">♙</span>
+      Clientes
+    </a>
+
+    <a
+      routerLink="/installations"
+      routerLinkActive="bg-cyan-500/10 text-cyan-400"
+      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+    >
+      <span class="text-lg">⌁</span>
+      Instalaciones
+    </a>
+
+    <a
+      routerLink="/technicians"
+      routerLinkActive="bg-cyan-500/10 text-cyan-400"
+      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+    >
+      <span class="text-lg">⚒</span>
+      Técnicos
+    </a>
+
+    <a
+      routerLink="/incidents"
+      routerLinkActive="bg-cyan-500/10 text-cyan-400"
+      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+    >
+      <span class="text-lg">!</span>
+      Incidencias
+    </a>
+
+  </nav>
+
+
+  <!-- User -->
+  <div class="border-t border-slate-800 p-4">
+
+    <div class="flex items-center gap-3 rounded-xl p-3">
+
+      <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-sm font-bold text-cyan-400">
+        FO
+      </div>
+
+      <div class="min-w-0">
+        <p class="truncate text-sm font-medium text-white">
+          Fernando Ortiz
+        </p>
+
+        <p class="truncate text-xs text-slate-500">
+          Administrador
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</aside>

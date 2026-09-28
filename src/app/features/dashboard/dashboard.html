@@ -1,0 +1,313 @@
+<div class="space-y-8">
+
+  <!-- Page heading -->
+  <div>
+    <p class="text-sm text-cyan-400">
+      Resumen general
+    </p>
+
+    <h1 class="mt-1 text-3xl font-bold tracking-tight text-white">
+      Dashboard
+    </h1>
+
+    <p class="mt-2 text-slate-400">
+      Controla el estado de tus instalaciones y operaciones de red.
+    </p>
+  </div>
+
+
+  <!-- Stats -->
+  <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+    <!-- Clients -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+
+      <div class="flex items-start justify-between">
+
+        <div>
+          <p class="text-sm text-slate-400">
+            Clientes
+          </p>
+
+          <p class="mt-2 text-3xl font-bold text-white">
+            248
+          </p>
+        </div>
+
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+          ♙
+        </div>
+
+      </div>
+
+      <p class="mt-4 text-xs text-emerald-400">
+        +12 este mes
+      </p>
+
+    </div>
+
+
+    <!-- Installations -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+
+      <div class="flex items-start justify-between">
+
+        <div>
+          <p class="text-sm text-slate-400">
+            Instalaciones
+          </p>
+
+          <p class="mt-2 text-3xl font-bold text-white">
+            186
+          </p>
+        </div>
+
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+          ⌁
+        </div>
+
+      </div>
+
+      <p class="mt-4 text-xs text-emerald-400">
+        14 esta semana
+      </p>
+
+    </div>
+
+
+    <!-- Technicians -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+
+      <div class="flex items-start justify-between">
+
+        <div>
+          <p class="text-sm text-slate-400">
+            Técnicos activos
+          </p>
+
+          <p class="mt-2 text-3xl font-bold text-white">
+            12
+          </p>
+        </div>
+
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+          ⚒
+        </div>
+
+      </div>
+
+      <p class="mt-4 text-xs text-slate-400">
+        10 disponibles
+      </p>
+
+    </div>
+
+
+    <!-- Incidents -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+
+      <div class="flex items-start justify-between">
+
+        <div>
+          <p class="text-sm text-slate-400">
+            Incidencias
+          </p>
+
+          <p class="mt-2 text-3xl font-bold text-white">
+            7
+          </p>
+        </div>
+
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/10 text-red-400">
+          !
+        </div>
+
+      </div>
+
+      <p class="mt-4 text-xs text-red-400">
+        3 requieren atención
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- Content -->
+  <div class="grid gap-6 xl:grid-cols-3">
+
+    <!-- Recent installations -->
+    <div class="xl:col-span-2 rounded-2xl border border-slate-800 bg-slate-900">
+
+      <div class="flex items-center justify-between border-b border-slate-800 p-6">
+
+        <div>
+          <h2 class="font-semibold text-white">
+            Instalaciones recientes
+          </h2>
+
+          <p class="mt-1 text-sm text-slate-500">
+            Últimas instalaciones registradas
+          </p>
+        </div>
+
+        <a
+          routerLink="/installations"
+          class="text-sm font-medium text-cyan-400 hover:text-cyan-300"
+        >
+          Ver todas
+        </a>
+
+      </div>
+
+
+      <div class="divide-y divide-slate-800">
+
+        <div class="flex items-center justify-between p-6">
+
+          <div>
+            <p class="font-medium text-white">
+              Juan García
+            </p>
+
+            <p class="mt-1 text-sm text-slate-500">
+              FTTH · 600 Mbps
+            </p>
+          </div>
+
+          <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+            Completada
+          </span>
+
+        </div>
+
+
+        <div class="flex items-center justify-between p-6">
+
+          <div>
+            <p class="font-medium text-white">
+              María López
+            </p>
+
+            <p class="mt-1 text-sm text-slate-500">
+              FTTH · 1 Gb
+            </p>
+          </div>
+
+          <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
+            Pendiente
+          </span>
+
+        </div>
+
+
+        <div class="flex items-center justify-between p-6">
+
+          <div>
+            <p class="font-medium text-white">
+              Antonio Ruiz
+            </p>
+
+            <p class="mt-1 text-sm text-slate-500">
+              FTTH · 600 Mbps
+            </p>
+          </div>
+
+          <span class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">
+            En progreso
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Incidents -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900">
+
+      <div class="border-b border-slate-800 p-6">
+
+        <h2 class="font-semibold text-white">
+          Incidencias
+        </h2>
+
+        <p class="mt-1 text-sm text-slate-500">
+          Incidencias que requieren atención
+        </p>
+
+      </div>
+
+
+      <div class="space-y-5 p-6">
+
+        <div class="flex gap-3">
+
+          <div class="mt-1 h-2.5 w-2.5 rounded-full bg-red-400"></div>
+
+          <div>
+            <p class="text-sm font-medium text-white">
+              Pérdida de conexión
+            </p>
+
+            <p class="mt-1 text-xs text-slate-500">
+              Cliente #0248 · Hace 15 min
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="flex gap-3">
+
+          <div class="mt-1 h-2.5 w-2.5 rounded-full bg-amber-400"></div>
+
+          <div>
+            <p class="text-sm font-medium text-white">
+              Señal óptica baja
+            </p>
+
+            <p class="mt-1 text-xs text-slate-500">
+              Cliente #0192 · Hace 42 min
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="flex gap-3">
+
+          <div class="mt-1 h-2.5 w-2.5 rounded-full bg-amber-400"></div>
+
+          <div>
+            <p class="text-sm font-medium text-white">
+              Router sin conexión
+            </p>
+
+            <p class="mt-1 text-xs text-slate-500">
+              Cliente #0177 · Hace 1 h
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="border-t border-slate-800 p-6">
+
+        <a
+          routerLink="/incidents"
+          class="text-sm font-medium text-cyan-400 hover:text-cyan-300"
+        >
+          Ver incidencias →
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
