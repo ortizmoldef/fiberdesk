@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { Client } from '../../shared/models/client.model';
+import { ClientService } from '../../core/services/client.service';
 
 @Component({
   selector: 'app-clients',
@@ -23,48 +25,11 @@ export class Clients {
     installationDate: '',
   };
 
-  clients: Client[] = [
-    {
-      id: 1,
-      name: 'Juan García',
-      email: 'juan.garcia@email.com',
-      phone: '600 123 456',
-      address: 'Calle Sevilla 24',
-      plan: 'FTTH 600 Mbps',
-      status: 'Activo',
-      installationDate: '2026-09-12',
-    },
-    {
-      id: 2,
-      name: 'María López',
-      email: 'maria.lopez@email.com',
-      phone: '611 234 567',
-      address: 'Avenida Andalucía 18',
-      plan: 'FTTH 1 Gb',
-      status: 'Pendiente',
-      installationDate: '2026-09-18',
-    },
-    {
-      id: 3,
-      name: 'Antonio Ruiz',
-      email: 'antonio.ruiz@email.com',
-      phone: '622 345 678',
-      address: 'Calle Real 42',
-      plan: 'FTTH 600 Mbps',
-      status: 'Activo',
-      installationDate: '2026-09-20',
-    },
-    {
-      id: 4,
-      name: 'Laura Martín',
-      email: 'laura.martin@email.com',
-      phone: '633 456 789',
-      address: 'Calle Granada 7',
-      plan: 'FTTH 1 Gb',
-      status: 'Suspendido',
-      installationDate: '2026-08-28',
-    },
-  ];
+  clients: Client[] = [];
+
+  constructor(private clientService: ClientService) {
+    this.clients = this.clientService.getClients();
+  }
 
   get filteredClients(): Client[] {
     const term = this.searchTerm.toLowerCase().trim();
@@ -90,7 +55,6 @@ export class Clients {
   }
 
   addClient(): void {
-
     if (
       !this.newClient.name.trim() ||
       !this.newClient.email.trim() ||
@@ -103,7 +67,6 @@ export class Clients {
       id: this.clients.length > 0
         ? Math.max(...this.clients.map(client => client.id)) + 1
         : 1,
-
       name: this.newClient.name,
       email: this.newClient.email,
       phone: this.newClient.phone,
@@ -113,7 +76,7 @@ export class Clients {
       installationDate: this.newClient.installationDate,
     };
 
-    this.clients.unshift(newClient);
+    this.clientService.addClient(newClient);
 
     this.closeForm();
   }
