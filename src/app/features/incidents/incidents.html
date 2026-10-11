@@ -1,12 +1,10 @@
+
 <div class="space-y-6">
 
   <!-- Cabecera -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-white">
-        Incidencias
-      </h1>
-
+      <h1 class="text-2xl font-bold text-white">Incidencias</h1>
       <p class="mt-1 text-sm text-slate-400">
         Gestiona las incidencias y averías de los clientes.
       </p>
@@ -15,337 +13,265 @@
     <button
       type="button"
       (click)="openForm()"
-      class="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-500"
+      class="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20"
     >
-      + Nueva incidencia
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+      </svg>
+      Nueva incidencia
     </button>
   </div>
 
-
-  <!-- Tabla de incidencias -->
+  <!-- Tabla -->
   <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
-
     <div class="overflow-x-auto">
-
       <table class="w-full text-left text-sm">
 
-        <!-- Cabecera tabla -->
         <thead class="border-b border-slate-800 bg-slate-950">
           <tr>
-
-            <th class="px-6 py-4 font-medium text-slate-400">
-              Incidencia
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400">
-              Cliente
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400">
-              Técnico
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400">
-              Prioridad
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400">
-              Estado
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400">
-              Fecha
-            </th>
-
+            <th class="px-6 py-4 font-medium text-slate-400">Incidencia</th>
+            <th class="px-6 py-4 font-medium text-slate-400">Cliente</th>
+            <th class="px-6 py-4 font-medium text-slate-400">Técnico</th>
+            <th class="px-6 py-4 font-medium text-slate-400">Prioridad</th>
+            <th class="px-6 py-4 font-medium text-slate-400">Estado</th>
+            <th class="px-6 py-4 font-medium text-slate-400">Fecha</th>
+            <th class="px-6 py-4 font-medium text-slate-400">Acciones</th>
           </tr>
         </thead>
 
-
-        <!-- Incidencias -->
         <tbody class="divide-y divide-slate-800">
-
           @for (incident of incidents; track incident.id) {
-
             <tr class="transition hover:bg-slate-800/50">
 
-              <!-- Incidencia -->
               <td class="px-6 py-4">
-
-                <div>
-                  <p class="font-medium text-white">
-                    {{ incident.title }}
-                  </p>
-
-                  <p class="mt-1 max-w-xs truncate text-xs text-slate-500">
-                    {{ incident.description }}
-                  </p>
-                </div>
-
+                <p class="font-medium text-white">{{ incident.title }}</p>
+                <p class="mt-1 max-w-xs truncate text-xs text-slate-500">
+                  {{ incident.description }}
+                </p>
               </td>
 
-
-              <!-- Cliente -->
               <td class="px-6 py-4 text-slate-300">
                 {{ incident.clientName }}
               </td>
 
-
-              <!-- Técnico -->
               <td class="px-6 py-4 text-slate-300">
-                {{ incident.technician }}
+                {{ incident.technician || 'Sin asignar' }}
               </td>
 
-
-              <!-- Prioridad -->
               <td class="px-6 py-4">
-
                 @if (incident.priority === 'Crítica') {
-                  <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400">
-                    Crítica
-                  </span>
+                  <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400">Crítica</span>
+                } @else if (incident.priority === 'Alta') {
+                  <span class="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-400">Alta</span>
+                } @else if (incident.priority === 'Media') {
+                  <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-400">Media</span>
+                } @else {
+                  <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">Baja</span>
                 }
-
-                @if (incident.priority === 'Alta') {
-                  <span class="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-400">
-                    Alta
-                  </span>
-                }
-
-                @if (incident.priority === 'Media') {
-                  <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-400">
-                    Media
-                  </span>
-                }
-
-                @if (incident.priority === 'Baja') {
-                  <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">
-                    Baja
-                  </span>
-                }
-
               </td>
 
-
-              <!-- Estado -->
               <td class="px-6 py-4">
-
                 @if (incident.status === 'Abierta') {
-                  <span class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">
-                    Abierta
-                  </span>
+                  <span class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">Abierta</span>
+                } @else if (incident.status === 'En curso') {
+                  <span class="rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-400">En curso</span>
+                } @else if (incident.status === 'Resuelta') {
+                  <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">Resuelta</span>
+                } @else {
+                  <span class="rounded-full bg-slate-500/10 px-3 py-1 text-xs font-medium text-slate-400">Cerrada</span>
                 }
-
-                @if (incident.status === 'En curso') {
-                  <span class="rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-400">
-                    En curso
-                  </span>
-                }
-
-                @if (incident.status === 'Resuelta') {
-                  <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">
-                    Resuelta
-                  </span>
-                }
-
-                @if (incident.status === 'Cerrada') {
-                  <span class="rounded-full bg-slate-500/10 px-3 py-1 text-xs font-medium text-slate-400">
-                    Cerrada
-                  </span>
-                }
-
               </td>
 
-
-              <!-- Fecha -->
               <td class="px-6 py-4 text-slate-400">
-                {{ incident.createdAt }}
+                {{ incident.createdAt || '—' }}
               </td>
 
+              <td class="px-6 py-4">
+                <button
+                  type="button"
+                  (click)="editIncident(incident)"
+                  class="rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 transition hover:bg-cyan-500/10"
+                >
+                  Editar
+                </button>
+              </td>
             </tr>
-
           } @empty {
-
             <tr>
-              <td
-                colspan="6"
-                class="px-6 py-12 text-center text-slate-500"
-              >
+              <td colspan="7" class="px-6 py-12 text-center text-slate-500">
                 No hay incidencias registradas.
               </td>
             </tr>
-
           }
-
         </tbody>
-
       </table>
-
     </div>
-
   </div>
 
-</div>
-
-
-<!-- Modal nueva incidencia -->
-@if (showForm) {
-
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-
-    <div class="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
-
-      <!-- Cabecera modal -->
-      <div class="mb-6 flex items-center justify-between">
-
-        <div>
-          <h2 class="text-xl font-bold text-white">
-            Nueva incidencia
-          </h2>
-
-          <p class="mt-1 text-sm text-slate-400">
-            Registra una nueva incidencia.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          (click)="closeForm()"
-          class="text-2xl text-slate-400 transition hover:text-white"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <!-- Formulario -->
-      <form
-        (ngSubmit)="addIncident()"
-        class="space-y-4"
+  <!-- Modal de creación y edición -->
+  @if (showForm) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/70 p-4"
+      (click)="closeForm()"
+    >
+      <div
+        class="my-auto w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
+        (click)="$event.stopPropagation()"
       >
 
-        <!-- Título -->
-        <div>
-          <label class="mb-1 block text-sm font-medium text-slate-300">
-            Título
-          </label>
-
-          <input
-            type="text"
-            name="title"
-            [(ngModel)]="newIncident.title"
-            placeholder="Ej. Sin conexión a Internet"
-            class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-blue-500"
-          />
-        </div>
-
-
-        <!-- Descripción -->
-        <div>
-          <label class="mb-1 block text-sm font-medium text-slate-300">
-            Descripción
-          </label>
-
-          <textarea
-            name="description"
-            [(ngModel)]="newIncident.description"
-            rows="3"
-            placeholder="Describe el problema..."
-            class="w-full resize-none rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-blue-500"
-          ></textarea>
-        </div>
-
-
-        <!-- Cliente -->
-        <div>
-          <label class="mb-1 block text-sm font-medium text-slate-300">
-            Cliente
-          </label>
-
-          <input
-            type="text"
-            name="clientName"
-            [(ngModel)]="newIncident.clientName"
-            placeholder="Nombre del cliente"
-            class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-blue-500"
-          />
-        </div>
-
-
-        <!-- Técnico -->
-        <div>
-          <label class="mb-1 block text-sm font-medium text-slate-300">
-            Técnico
-          </label>
-
-          <input
-            type="text"
-            name="technician"
-            [(ngModel)]="newIncident.technician"
-            placeholder="Nombre del técnico"
-            class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-blue-500"
-          />
-        </div>
-
-
-        <!-- Prioridad -->
-        <div>
-          <label class="mb-1 block text-sm font-medium text-slate-300">
-            Prioridad
-          </label>
-
-          <select
-            name="priority"
-            [(ngModel)]="newIncident.priority"
-            class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-blue-500"
-          >
-            <option value="Baja">Baja</option>
-            <option value="Media">Media</option>
-            <option value="Alta">Alta</option>
-            <option value="Crítica">Crítica</option>
-          </select>
-        </div>
-
-
-        <!-- Fecha -->
-        <div>
-          <label class="mb-1 block text-sm font-medium text-slate-300">
-            Fecha
-          </label>
-
-          <input
-            type="date"
-            name="createdAt"
-            [(ngModel)]="newIncident.createdAt"
-            class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-blue-500"
-          />
-        </div>
-
-
-        <!-- Botones -->
-        <div class="flex justify-end gap-3 pt-4">
+        <div class="mb-6 flex items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white">
+              {{ editingIncidentId !== null ? 'Editar incidencia' : 'Nueva incidencia' }}
+            </h2>
+            <p class="mt-1 text-sm text-slate-400">
+              {{ editingIncidentId !== null
+                ? 'Modifica los datos de la incidencia.'
+                : 'Registra una nueva incidencia.' }}
+            </p>
+          </div>
 
           <button
             type="button"
             (click)="closeForm()"
-            class="rounded-lg border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-slate-800"
+            class="text-2xl text-slate-400 transition hover:text-white"
+            aria-label="Cerrar formulario"
           >
-            Cancelar
+            &times;
           </button>
-
-          <button
-            type="submit"
-            class="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-500"
-          >
-            Crear incidencia
-          </button>
-
         </div>
 
-      </form>
+        <form #incidentForm="ngForm" (ngSubmit)="saveIncident()" class="space-y-4">
 
+          <div>
+            <label for="title" class="mb-1 block text-sm font-medium text-slate-300">
+              Título *
+            </label>
+            <input
+              id="title"
+              type="text"
+              name="title"
+              required
+              [(ngModel)]="newIncident.title"
+              placeholder="Ej. Sin conexión a Internet"
+              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500"
+            />
+          </div>
+
+          <div>
+            <label for="description" class="mb-1 block text-sm font-medium text-slate-300">
+              Descripción
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              [(ngModel)]="newIncident.description"
+              rows="3"
+              placeholder="Describe el problema..."
+              class="w-full resize-none rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500"
+            ></textarea>
+          </div>
+
+          <div>
+            <label for="clientName" class="mb-1 block text-sm font-medium text-slate-300">
+              Cliente *
+            </label>
+            <input
+              id="clientName"
+              type="text"
+              name="clientName"
+              required
+              [(ngModel)]="newIncident.clientName"
+              placeholder="Nombre del cliente"
+              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500"
+            />
+          </div>
+
+          <div>
+            <label for="technician" class="mb-1 block text-sm font-medium text-slate-300">
+              Técnico
+            </label>
+            <input
+              id="technician"
+              type="text"
+              name="technician"
+              [(ngModel)]="newIncident.technician"
+              placeholder="Nombre del técnico"
+              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label for="priority" class="mb-1 block text-sm font-medium text-slate-300">
+                Prioridad
+              </label>
+              <select
+                id="priority"
+                name="priority"
+                [(ngModel)]="newIncident.priority"
+                class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-cyan-500"
+              >
+                <option value="Baja">Baja</option>
+                <option value="Media">Media</option>
+                <option value="Alta">Alta</option>
+                <option value="Crítica">Crítica</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="status" class="mb-1 block text-sm font-medium text-slate-300">
+                Estado
+              </label>
+              <select
+                id="status"
+                name="status"
+                [(ngModel)]="newIncident.status"
+                class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-cyan-500"
+              >
+                <option value="Abierta">Abierta</option>
+                <option value="En curso">En curso</option>
+                <option value="Resuelta">Resuelta</option>
+                <option value="Cerrada">Cerrada</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="createdAt" class="mb-1 block text-sm font-medium text-slate-300">
+              Fecha
+            </label>
+            <input
+              id="createdAt"
+              type="date"
+              name="createdAt"
+              [(ngModel)]="newIncident.createdAt"
+              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-cyan-500"
+            />
+          </div>
+
+          <div class="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              (click)="closeForm()"
+              class="rounded-lg border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-slate-800"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="submit"
+              [disabled]="incidentForm.invalid"
+              class="rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {{ editingIncidentId !== null ? 'Guardar cambios' : 'Crear incidencia' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
     </div>
+  }
 
-  </div>
-
-}
+</div>

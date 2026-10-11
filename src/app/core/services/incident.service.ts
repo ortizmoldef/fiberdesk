@@ -56,4 +56,16 @@ export class IncidentService {
   addIncident(incident: Incident): void {
     this.incidents.unshift(incident);
   }
+
+
+  updateIncident(updatedIncident: Incident): void {
+  const index = this.incidents.findIndex(
+    incident => incident.id === updatedIncident.id
+  );
+
+  if (index !== -1) {
+    this.incidents[index] = updatedIncident;
+  }
+}
+
 }

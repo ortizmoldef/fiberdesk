@@ -1,8 +1,8 @@
+
 <div class="space-y-6">
 
   <!-- Header -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-
     <div>
       <h1 class="text-2xl font-bold text-white">
         Clientes
@@ -13,41 +13,48 @@
       </p>
     </div>
 
+    <!-- Botón nuevo cliente -->
     <button
       type="button"
       (click)="openForm()"
-      class="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+      class="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20"
     >
-      + Nuevo cliente
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 4v16m8-8H4"
+        />
+      </svg>
+
+      Nuevo cliente
     </button>
-
   </div>
-
 
   <!-- Search -->
   <div class="rounded-xl border border-slate-800 bg-slate-900 p-4">
-
     <input
       type="text"
       [(ngModel)]="searchTerm"
       placeholder="Buscar por nombre, email o teléfono..."
       class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
     />
-
   </div>
-
 
   <!-- Clients table -->
   <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
-
     <div class="overflow-x-auto">
-
       <table class="w-full text-left text-sm">
 
         <thead class="border-b border-slate-800 bg-slate-950">
-
           <tr>
-
             <th class="px-6 py-4 font-medium text-slate-400">
               Cliente
             </th>
@@ -72,20 +79,19 @@
               Instalación
             </th>
 
+            <th class="px-9 py-4 text-right font-medium text-slate-400">
+              Acciones
+            </th>
           </tr>
-
         </thead>
-
 
         <tbody class="divide-y divide-slate-800">
 
           @for (client of filteredClients; track client.id) {
-
             <tr class="transition hover:bg-slate-800/50">
 
               <!-- Client -->
               <td class="px-6 py-4">
-
                 <div class="font-medium text-white">
                   {{ client.name }}
                 </div>
@@ -93,13 +99,10 @@
                 <div class="mt-1 text-xs text-slate-500">
                   ID #{{ client.id }}
                 </div>
-
               </td>
-
 
               <!-- Contact -->
               <td class="px-6 py-4">
-
                 <div class="text-slate-300">
                   {{ client.email }}
                 </div>
@@ -107,64 +110,72 @@
                 <div class="mt-1 text-xs text-slate-500">
                   {{ client.phone }}
                 </div>
-
               </td>
-
 
               <!-- Address -->
               <td class="px-6 py-4 text-slate-400">
                 {{ client.address }}
               </td>
 
-
               <!-- Plan -->
               <td class="px-6 py-4 text-slate-300">
                 {{ client.plan }}
               </td>
 
-
               <!-- Status -->
               <td class="px-6 py-4">
-
                 @if (client.status === 'Activo') {
-
                   <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
                     Activo
                   </span>
-
                 } @else if (client.status === 'Pendiente') {
-
                   <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
                     Pendiente
                   </span>
-
                 } @else {
-
                   <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400">
                     Suspendido
                   </span>
-
                 }
-
               </td>
-
 
               <!-- Installation date -->
               <td class="px-6 py-4 text-slate-400">
                 {{ client.installationDate || 'Sin fecha' }}
               </td>
 
+              <!-- Actions -->
+              
+<!-- Actions -->
+<td class="px-6 py-4 text-right">
+  <button
+    type="button"
+    (click)="editClient(client)"
+    class="inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 transition hover:border-cyan-400/60 hover:text-cyan-300"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-3.5 w-3.5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M16.862 4.487l2.651 2.651M8 16l-1 4 4-1L19.5 10.5a2.121 2.121 0 00-3-3L8 16z"
+      />
+    </svg>
+    Editar
+  </button>
+</td>
+
+
             </tr>
-
           } @empty {
-
             <tr>
-
-              <td
-                colspan="6"
-                class="px-6 py-12 text-center"
-              >
-
+              <td colspan="7" class="px-6 py-12 text-center">
                 <div class="text-slate-400">
                   No se encontraron clientes.
                 </div>
@@ -172,45 +183,36 @@
                 <div class="mt-1 text-sm text-slate-600">
                   Prueba con otro término de búsqueda.
                 </div>
-
               </td>
-
             </tr>
-
           }
 
         </tbody>
-
       </table>
-
     </div>
-
   </div>
 
 </div>
 
-
-<!-- New client modal -->
-
+<!-- Modal crear / editar cliente -->
 @if (showForm) {
-
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-
-    <div class="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl">
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/70 p-4"
+  >
+    <div class="my-auto w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl">
 
       <!-- Modal header -->
       <div class="flex items-center justify-between border-b border-slate-800 px-6 py-5">
-
         <div>
-
           <h2 class="text-lg font-semibold text-white">
-            Nuevo cliente
+            {{ editingClientId === null ? 'Nuevo cliente' : 'Editar cliente' }}
           </h2>
 
           <p class="mt-1 text-sm text-slate-500">
-            Añade un nuevo cliente a FiberDesk.
+            {{ editingClientId === null
+              ? 'Añade un nuevo cliente a FiberDesk.'
+              : 'Modifica los datos del cliente seleccionado.' }}
           </p>
-
         </div>
 
         <button
@@ -220,19 +222,16 @@
         >
           ✕
         </button>
-
       </div>
-
 
       <!-- Form -->
       <form
-        (ngSubmit)="addClient()"
+        (ngSubmit)="editingClientId === null ? addClient() : updateClient()"
         class="space-y-5 p-6"
       >
 
         <!-- Name -->
         <div>
-
           <label
             for="name"
             class="mb-2 block text-sm font-medium text-slate-300"
@@ -249,15 +248,11 @@
             required
             class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
           />
-
         </div>
-
 
         <!-- Email + phone -->
         <div class="grid gap-5 sm:grid-cols-2">
-
           <div>
-
             <label
               for="email"
               class="mb-2 block text-sm font-medium text-slate-300"
@@ -274,12 +269,9 @@
               required
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
             />
-
           </div>
 
-
           <div>
-
             <label
               for="phone"
               class="mb-2 block text-sm font-medium text-slate-300"
@@ -296,15 +288,11 @@
               required
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
             />
-
           </div>
-
         </div>
-
 
         <!-- Address -->
         <div>
-
           <label
             for="address"
             class="mb-2 block text-sm font-medium text-slate-300"
@@ -320,15 +308,11 @@
             placeholder="Calle, número, localidad..."
             class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
           />
-
         </div>
-
 
         <!-- Plan + status -->
         <div class="grid gap-5 sm:grid-cols-2">
-
           <div>
-
             <label
               for="plan"
               class="mb-2 block text-sm font-medium text-slate-300"
@@ -342,30 +326,14 @@
               [(ngModel)]="newClient.plan"
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
             >
-
-              <option value="FTTH 300 Mbps">
-                FTTH 300 Mbps
-              </option>
-
-              <option value="FTTH 600 Mbps">
-                FTTH 600 Mbps
-              </option>
-
-              <option value="FTTH 1 Gb">
-                FTTH 1 Gb
-              </option>
-
-              <option value="FTTH 2 Gb">
-                FTTH 2 Gb
-              </option>
-
+              <option value="FTTH 300 Mbps">FTTH 300 Mbps</option>
+              <option value="FTTH 600 Mbps">FTTH 600 Mbps</option>
+              <option value="FTTH 1 Gb">FTTH 1 Gb</option>
+              <option value="FTTH 2 Gb">FTTH 2 Gb</option>
             </select>
-
           </div>
 
-
           <div>
-
             <label
               for="status"
               class="mb-2 block text-sm font-medium text-slate-300"
@@ -379,29 +347,15 @@
               [(ngModel)]="newClient.status"
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
             >
-
-              <option value="Pendiente">
-                Pendiente
-              </option>
-
-              <option value="Activo">
-                Activo
-              </option>
-
-              <option value="Suspendido">
-                Suspendido
-              </option>
-
+              <option value="Pendiente">Pendiente</option>
+              <option value="Activo">Activo</option>
+              <option value="Suspendido">Suspendido</option>
             </select>
-
           </div>
-
         </div>
-
 
         <!-- Installation date -->
         <div>
-
           <label
             for="installationDate"
             class="mb-2 block text-sm font-medium text-slate-300"
@@ -416,13 +370,10 @@
             [(ngModel)]="newClient.installationDate"
             class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
           />
-
         </div>
-
 
         <!-- Buttons -->
         <div class="flex justify-end gap-3 border-t border-slate-800 pt-5">
-
           <button
             type="button"
             (click)="closeForm()"
@@ -435,15 +386,11 @@
             type="submit"
             class="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
           >
-            Crear cliente
+            {{ editingClientId === null ? 'Crear cliente' : 'Guardar cambios' }}
           </button>
-
         </div>
 
       </form>
-
     </div>
-
   </div>
-
 }

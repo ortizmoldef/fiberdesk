@@ -56,4 +56,11 @@ export class ClientService {
   addClient(client: Client): void {
     this.clients.unshift(client);
   }
+
+  updateClient(updatedClient: Client): void {
+    const index = this.clients.findIndex((c) => c.id === updatedClient.id);
+    if (index !== -1) {
+      this.clients[index] = updatedClient;
+    }
+  }
 }

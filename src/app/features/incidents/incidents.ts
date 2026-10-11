@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -10,37 +11,60 @@ import { IncidentService } from '../../core/services/incident.service';
   templateUrl: './incidents.html',
 })
 export class Incidents {
-
   incidents: Incident[] = [];
 
   showForm = false;
+  editingIncidentId: number | null = null;
 
-  newIncident = {
+  newIncident: Omit<Incident, 'id'> = {
     title: '',
     description: '',
     clientName: '',
     technician: '',
-    priority: 'Media' as Incident['priority'],
-    status: 'Abierta' as Incident['status'],
+    priority: 'Media',
+    status: 'Abierta',
     createdAt: '',
   };
 
   constructor(
     private incidentService: IncidentService
   ) {
+    this.loadIncidents();
+  }
+
+  loadIncidents(): void {
     this.incidents = this.incidentService.getIncidents();
   }
 
   openForm(): void {
+    this.editingIncidentId = null;
+    this.resetForm();
+    this.showForm = true;
+  }
+
+  editIncident(incident: Incident): void {
+    this.editingIncidentId = incident.id;
+
+    this.newIncident = {
+      title: incident.title,
+      description: incident.description,
+      clientName: incident.clientName,
+      technician: incident.technician,
+      priority: incident.priority,
+      status: incident.status,
+      createdAt: incident.createdAt,
+    };
+
     this.showForm = true;
   }
 
   closeForm(): void {
     this.showForm = false;
+    this.editingIncidentId = null;
     this.resetForm();
   }
 
-  addIncident(): void {
+  saveIncident(): void {
     if (
       !this.newIncident.title.trim() ||
       !this.newIncident.clientName.trim()
@@ -48,21 +72,25 @@ export class Incidents {
       return;
     }
 
-    const newIncident: Incident = {
-      id: this.incidents.length > 0
-        ? Math.max(...this.incidents.map(incident => incident.id)) + 1
-        : 1,
-      title: this.newIncident.title,
-      description: this.newIncident.description,
-      clientName: this.newIncident.clientName,
-      technician: this.newIncident.technician,
-      priority: this.newIncident.priority,
-      status: this.newIncident.status,
-      createdAt: this.newIncident.createdAt,
-    };
+    if (this.editingIncidentId !== null) {
+      const updatedIncident: Incident = {
+        id: this.editingIncidentId,
+        ...this.newIncident,
+      };
 
-    this.incidentService.addIncident(newIncident);
+      this.incidentService.updateIncident(updatedIncident);
+    } else {
+      const newIncident: Incident = {
+        id: this.incidents.length > 0
+          ? Math.max(...this.incidents.map(incident => incident.id)) + 1
+          : 1,
+        ...this.newIncident,
+      };
 
+      this.incidentService.addIncident(newIncident);
+    }
+
+    this.loadIncidents();
     this.closeForm();
   }
 

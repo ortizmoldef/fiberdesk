@@ -1,3 +1,4 @@
+
 <div class="space-y-6">
 
   <!-- Header -->
@@ -11,7 +12,6 @@
     </p>
   </div>
 
-
   <!-- Technician cards -->
   <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
 
@@ -20,16 +20,15 @@
       <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
 
         <!-- Header -->
-        <div class="flex items-start justify-between">
+        <div class="flex items-start justify-between gap-3">
 
           <div class="flex items-center gap-4">
 
-            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-lg font-bold text-cyan-400">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-lg font-bold text-cyan-400">
               {{ technician.name.charAt(0) }}
             </div>
 
             <div>
-
               <h2 class="font-semibold text-white">
                 {{ technician.name }}
               </h2>
@@ -37,73 +36,52 @@
               <p class="mt-1 text-xs text-slate-500">
                 Técnico #{{ technician.id }}
               </p>
-
             </div>
 
           </div>
 
-
           <!-- Status -->
           @if (technician.status === 'Disponible') {
-
             <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
               Disponible
             </span>
-
           } @else if (technician.status === 'Ocupado') {
-
             <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
               Ocupado
             </span>
-
           } @else {
-
             <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400">
               Fuera de servicio
             </span>
-
           }
 
         </div>
-
 
         <!-- Information -->
         <div class="mt-6 space-y-3">
 
           <div>
-            <p class="text-xs text-slate-500">
-              Especialización
-            </p>
-
+            <p class="text-xs text-slate-500">Especialización</p>
             <p class="mt-1 text-sm text-slate-300">
               {{ technician.specialization }}
             </p>
           </div>
 
-
           <div>
-            <p class="text-xs text-slate-500">
-              Email
-            </p>
-
-            <p class="mt-1 text-sm text-slate-300">
+            <p class="text-xs text-slate-500">Email</p>
+            <p class="mt-1 break-all text-sm text-slate-300">
               {{ technician.email }}
             </p>
           </div>
 
-
           <div>
-            <p class="text-xs text-slate-500">
-              Teléfono
-            </p>
-
+            <p class="text-xs text-slate-500">Teléfono</p>
             <p class="mt-1 text-sm text-slate-300">
               {{ technician.phone }}
             </p>
           </div>
 
         </div>
-
 
         <!-- Stats -->
         <div class="mt-6 border-t border-slate-800 pt-5">
@@ -118,10 +96,219 @@
 
         </div>
 
+        <!-- Edit button -->
+        <button
+          type="button"
+          (click)="editTechnician(technician)"
+          class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M16.862 4.487l2.651 2.651M8 16l-1 4 4-1L19.5 10.5a2.121 2.121 0 00-3-3L8 16z"
+            />
+          </svg>
+
+          Editar técnico
+        </button>
+
       </div>
 
     }
 
   </div>
+
+  <!-- Edit modal -->
+  @if (showForm) {
+
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm"
+      (click)="closeForm()"
+    >
+
+      <div
+        class="my-auto w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl"
+        (click)="$event.stopPropagation()"
+      >
+
+        <!-- Modal header -->
+        <div class="mb-6 flex items-start justify-between">
+
+          <div>
+            <h2 class="text-xl font-bold text-white">
+              Editar técnico
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+              Modifica los datos del técnico seleccionado.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            (click)="closeForm()"
+            class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-800 hover:text-white"
+            aria-label="Cerrar formulario"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+
+        </div>
+
+        <!-- Form -->
+        <form
+          #technicianForm="ngForm"
+          (ngSubmit)="saveTechnician()"
+          class="space-y-4"
+        >
+
+          <!-- Name -->
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">
+              Nombre completo
+            </label>
+
+            <input
+              type="text"
+              name="name"
+              [(ngModel)]="formData.name"
+              required
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+              placeholder="Nombre del técnico"
+            />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">
+              Correo electrónico
+            </label>
+
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="formData.email"
+              required
+              email
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+              placeholder="tecnico@fiberdesk.com"
+            />
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">
+              Teléfono
+            </label>
+
+            <input
+              type="tel"
+              name="phone"
+              [(ngModel)]="formData.phone"
+              required
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+              placeholder="600 111 222"
+            />
+          </div>
+
+          <!-- Specialization -->
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">
+              Especialización
+            </label>
+
+            <input
+              type="text"
+              name="specialization"
+              [(ngModel)]="formData.specialization"
+              required
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+              placeholder="Instalaciones FTTH"
+            />
+          </div>
+
+          <!-- Status -->
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">
+              Estado
+            </label>
+
+            <select
+              name="status"
+              [(ngModel)]="formData.status"
+              required
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+            >
+              <option value="Disponible">Disponible</option>
+              <option value="Ocupado">Ocupado</option>
+              <option value="Fuera de servicio">Fuera de servicio</option>
+            </select>
+          </div>
+
+          <!-- Installations -->
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">
+              Instalaciones realizadas
+            </label>
+
+            <input
+              type="number"
+              name="installations"
+              [(ngModel)]="formData.installations"
+              required
+              min="0"
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+            />
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col-reverse gap-3 pt-3 sm:flex-row sm:justify-end">
+
+            <button
+              type="button"
+              (click)="closeForm()"
+              class="rounded-xl border border-slate-700 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-slate-800"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="submit"
+              [disabled]="technicianForm.invalid"
+              class="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Guardar cambios
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  }
 
 </div>

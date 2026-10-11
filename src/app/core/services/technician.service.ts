@@ -45,7 +45,47 @@ export class TechnicianService {
     },
   ];
 
+  // Obtener todos los técnicos
   getTechnicians(): Technician[] {
     return this.technicians;
+  }
+
+  // Obtener un técnico por su ID
+  getTechnicianById(id: number): Technician | undefined {
+    return this.technicians.find(technician => technician.id === id);
+  }
+
+  // Modificar los datos de un técnico
+  updateTechnician(
+    id: number,
+    updatedData: Partial<Technician>
+  ): boolean {
+    const index = this.technicians.findIndex(
+      technician => technician.id === id
+    );
+
+    if (index === -1) {
+      return false;
+    }
+
+    this.technicians[index] = {
+      ...this.technicians[index],
+      ...updatedData,
+      id: this.technicians[index].id,
+    };
+
+    return true;
+  }
+
+  // Añadir un nuevo técnico
+  addTechnician(technician: Technician): void {
+    this.technicians.push(technician);
+  }
+
+  // Eliminar un técnico
+  deleteTechnician(id: number): void {
+    this.technicians = this.technicians.filter(
+      technician => technician.id !== id
+    );
   }
 }

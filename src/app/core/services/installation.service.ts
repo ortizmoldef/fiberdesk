@@ -52,4 +52,14 @@ export class InstallationService {
   addInstallation(installation: Installation): void {
     this.installations.unshift(installation);
   }
+
+  updateInstallation(updatedInstallation: Installation): void {
+  const index = this.installations.findIndex(
+    installation => installation.id === updatedInstallation.id
+  );
+
+  if (index !== -1) {
+    this.installations[index] = updatedInstallation;
+  }
+}
 }

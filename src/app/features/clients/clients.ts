@@ -11,17 +11,19 @@ import { ClientService } from '../../core/services/client.service';
 })
 export class Clients {
 
+
+  editingClientId: number | null = null;
   searchTerm = '';
 
   showForm = false;
 
-  newClient = {
+    newClient: Omit<Client, 'id'> = {
     name: '',
     email: '',
     phone: '',
     address: '',
     plan: 'FTTH 600 Mbps',
-    status: 'Pendiente' as Client['status'],
+    status: 'Pendiente',
     installationDate: '',
   };
 
@@ -51,6 +53,7 @@ export class Clients {
 
   closeForm(): void {
     this.showForm = false;
+    this.editingClientId = null;
     this.resetForm();
   }
 
@@ -80,6 +83,54 @@ export class Clients {
 
     this.closeForm();
   }
+
+
+  editClient(client: Client): void {
+  this.editingClientId = client.id;
+
+  this.newClient = {
+    name: client.name,
+    email: client.email,
+    phone: client.phone,
+    address: client.address,
+    plan: client.plan,
+    status: client.status,
+    installationDate: client.installationDate,
+  };
+
+  this.showForm = true;
+}
+
+updateClient(): void {
+  if (this.editingClientId === null) {
+    return;
+  }
+
+  if (
+    !this.newClient.name.trim() ||
+    !this.newClient.email.trim() ||
+    !this.newClient.phone.trim()
+  ) {
+    return;
+  }
+
+  const updatedClient: Client = {
+    id: this.editingClientId,
+    name: this.newClient.name,
+    email: this.newClient.email,
+    phone: this.newClient.phone,
+    address: this.newClient.address,
+    plan: this.newClient.plan,
+    status: this.newClient.status,
+    installationDate: this.newClient.installationDate,
+  };
+
+  this.clientService.updateClient(updatedClient);
+
+  this.clients = this.clientService.getClients();
+
+  this.closeForm();
+}
 
   resetForm(): void {
     this.newClient = {
