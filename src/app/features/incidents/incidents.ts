@@ -58,6 +58,20 @@ export class Incidents {
     this.showForm = true;
   }
 
+  deleteIncident(incident: Incident): void {
+    const confirmed = confirm(
+      `¿Seguro que quieres eliminar la incidencia "${incident.title}"?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.incidentService.deleteIncident(incident.id);
+    this.loadIncidents();
+  }
+
+
   closeForm(): void {
     this.showForm = false;
     this.editingIncidentId = null;
@@ -106,17 +120,6 @@ export class Incidents {
     };
   }
 
-   deleteIncident(incident: Incident): void {
-    const confirmed = confirm(
-      `¿Seguro que quieres eliminar la incidencia "${incident.title}"?`
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    this.incidentService.deleteIncident(incident.id);
-    this.loadIncidents();
-  }
+  
 
 }

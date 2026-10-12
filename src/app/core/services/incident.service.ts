@@ -68,4 +68,10 @@ export class IncidentService {
   }
 }
 
+  deleteIncident(id: number): void {
+    this.incidents = this.incidents.filter(
+      incident => incident.id !== id
+    );
+  }
+
 }
