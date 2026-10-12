@@ -63,4 +63,10 @@ export class ClientService {
       this.clients[index] = updatedClient;
     }
   }
+
+   deleteClient(id: number): void {
+    this.clients = this.clients.filter(
+      client => client.id !== id
+    );
+  }
 }

@@ -79,7 +79,7 @@
               Instalación
             </th>
 
-            <th class="px-9 py-4 text-right font-medium text-slate-400">
+            <th class="px-23 py-4 text-right font-medium text-slate-400">
               Acciones
             </th>
           </tr>
@@ -145,33 +145,57 @@
               </td>
 
               <!-- Actions -->
-              
-<!-- Actions -->
-<td class="px-6 py-4 text-right">
-  <button
-    type="button"
-    (click)="editClient(client)"
-    class="inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 transition hover:border-cyan-400/60 hover:text-cyan-300"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-3.5 w-3.5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="1.8"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M16.862 4.487l2.651 2.651M8 16l-1 4 4-1L19.5 10.5a2.121 2.121 0 00-3-3L8 16z"
-      />
-    </svg>
-    Editar
-  </button>
-</td>
+              <td class="px-6 py-4 text-right">
+              <div class="flex items-center justify-end gap-2">
 
+              <!-- Botón editar -->
+              <button
+                type="button"
+                (click)="editClient(client)"
+                class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 shadow-lg shadow-blue-500/20 transition hover:border-cyan-400/60 hover:text-cyan-300 hover:shadow-blue-500/30"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-3.5 w-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M16.862 4.487l2.651 2.651M8 16l-1 4 4-1L19.5 10.5a2.121 2.121 0 00-3-3L8 16z"
+                  />
+                </svg>
+                Editar
+              </button>
 
+              <!-- Botón eliminar -->
+              <button
+                type="button"
+                (click)="deleteClient(client)"
+                class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-400 transition hover:border-red-400/60 hover:bg-red-500/10"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-3.5 w-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 7h12M10 11v6m4-6v6M9 7V4h6v3m-8 0 1 13h8l1-13"
+                  />
+                </svg>
+                Eliminar
+              </button>
+
+              </div>
+              </td>
             </tr>
           } @empty {
             <tr>

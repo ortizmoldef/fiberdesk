@@ -132,6 +132,20 @@ updateClient(): void {
   this.closeForm();
 }
 
+
+
+  deleteClient(client: Client): void {
+    const confirmed = confirm(
+      `¿Seguro que quieres eliminar al cliente "${client.name}"?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.clientService.deleteClient(client.id);
+    this.clients = this.clientService.getClients();
+  }
   resetForm(): void {
     this.newClient = {
       name: '',
