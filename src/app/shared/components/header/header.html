@@ -1,4 +1,3 @@
-
 <header class="flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-6 lg:px-8">
 
   <!-- Título -->
@@ -11,14 +10,156 @@
   <div class="flex items-center gap-4">
 
     <!-- Notificaciones -->
-    <button
-      type="button"
-      aria-label="Notificaciones"
-      class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-800 hover:text-white"
-    >
-      <span class="text-lg">♢</span>
-      <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-cyan-400"></span>
-    </button>
+    <div class="relative">
+
+      <button
+        type="button"
+        (click)="toggleNotifications(); $event.stopPropagation()"
+        [attr.aria-expanded]="isNotificationsOpen"
+        aria-label="Notificaciones"
+        aria-haspopup="true"
+        class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      >
+        <span class="text-xl">🔔</span>
+
+        @if (notificationCount > 0) {
+          <span
+            class="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white ring-2 ring-slate-950"
+          >
+            {{ notificationCount > 99 ? '99+' : notificationCount }}
+          </span>
+        }
+      </button>
+
+      <!-- Panel de notificaciones -->
+      @if (isNotificationsOpen) {
+        <div
+          class="absolute right-0 top-full z-50 mt-3 w-[min(360px,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-2xl"
+          (click)="$event.stopPropagation()"
+        >
+
+          <!-- Cabecera del panel -->
+          <div class="flex items-center justify-between border-b border-slate-800 px-4 py-4">
+            <div>
+              <h3 class="text-sm font-semibold text-white">
+                Notificaciones
+              </h3>
+
+              <p class="mt-1 text-xs text-slate-500">
+                Incidencias pendientes
+              </p>
+            </div>
+
+            <span class="rounded-lg bg-cyan-500/10 px-2.5 py-1 text-xs font-semibold text-cyan-400">
+              {{ notificationCount }}
+            </span>
+          </div>
+
+          <!-- Lista de incidencias pendientes -->
+          <div class="max-h-96 overflow-y-auto">
+
+            @for (incident of pendingIncidents; track incident.id) {
+              <button
+                type="button"
+                (click)="openIncident(incident)"
+                class="flex w-full gap-3 border-b border-slate-800/70 px-4 py-4 text-left transition hover:bg-slate-800/70"
+              >
+
+                <!-- Icono según prioridad -->
+                <div
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                  [class.bg-red-500/10]="incident.priority === 'Crítica'"
+                  [class.text-red-400]="incident.priority === 'Crítica'"
+                  [class.bg-orange-500/10]="incident.priority === 'Alta'"
+                  [class.text-orange-400]="incident.priority === 'Alta'"
+                  [class.bg-amber-500/10]="incident.priority === 'Media'"
+                  [class.text-amber-400]="incident.priority === 'Media'"
+                  [class.bg-slate-800]="incident.priority === 'Baja'"
+                  [class.text-slate-400]="incident.priority === 'Baja'"
+                >
+                  <span class="text-lg">
+                    {{ incident.priority === 'Crítica' ? '⚠' : '!' }}
+                  </span>
+                </div>
+
+                <!-- Información de la incidencia -->
+                <div class="min-w-0 flex-1">
+
+                  <div class="flex items-start justify-between gap-2">
+                    <p class="text-sm font-medium text-white">
+                      {{ incident.title }}
+                    </p>
+
+                    <span
+                      class="shrink-0 rounded-md px-2 py-1 text-[10px] font-semibold"
+                      [class.bg-red-500/10]="incident.priority === 'Crítica'"
+                      [class.text-red-400]="incident.priority === 'Crítica'"
+                      [class.bg-orange-500/10]="incident.priority === 'Alta'"
+                      [class.text-orange-400]="incident.priority === 'Alta'"
+                      [class.bg-amber-500/10]="incident.priority === 'Media'"
+                      [class.text-amber-400]="incident.priority === 'Media'"
+                      [class.bg-slate-800]="incident.priority === 'Baja'"
+                      [class.text-slate-400]="incident.priority === 'Baja'"
+                    >
+                      {{ incident.priority }}
+                    </span>
+                  </div>
+
+                  <p class="mt-1 truncate text-xs text-slate-400">
+                    {{ incident.clientName }}
+                  </p>
+
+                  <div class="mt-2 flex items-center gap-2">
+                    <span
+                      class="h-1.5 w-1.5 rounded-full"
+                      [class.bg-red-400]="incident.priority === 'Crítica'"
+                      [class.bg-orange-400]="incident.priority === 'Alta'"
+                      [class.bg-amber-400]="incident.priority === 'Media'"
+                      [class.bg-slate-400]="incident.priority === 'Baja'"
+                    ></span>
+
+                    <span class="text-xs text-slate-500">
+                      {{ incident.status }}
+                    </span>
+                  </div>
+
+                </div>
+              </button>
+            } @empty {
+              <div class="px-5 py-10 text-center">
+                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
+                  <span class="text-xl text-emerald-400">✓</span>
+                </div>
+
+                <p class="text-sm font-medium text-white">
+                  Todo está en orden
+                </p>
+
+                <p class="mt-1 text-xs text-slate-500">
+                  No hay incidencias pendientes.
+                </p>
+              </div>
+            }
+
+          </div>
+
+          <!-- Pie del panel -->
+          <div class="border-t border-slate-800 p-3">
+            <button
+              type="button"
+              (click)="openIncident(pendingIncidents[0])"
+              [disabled]="notificationCount === 0"
+              class="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/10 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Ver todas las incidencias
+              <span>→</span>
+            </button>
+          </div>
+
+        </div>
+      }
+
+    </div>
 
     <!-- Perfil y menú desplegable -->
     <div class="relative border-l border-slate-800 pl-4">
@@ -50,13 +191,14 @@
           class="absolute right-0 top-full z-50 mt-3 w-60 rounded-xl border border-slate-800 bg-slate-900 p-2 shadow-2xl"
           (click)="$event.stopPropagation()"
         >
+
           <!-- Cabecera del menú -->
           <div class="border-b border-slate-800 px-3 py-3">
             <p class="text-sm font-medium text-white">Fernando Ortiz</p>
             <p class="mt-1 text-xs text-slate-500">Administrador</p>
           </div>
 
-          <!-- Opciones -->
+          <!-- Mi perfil -->
           <button
             type="button"
             (click)="openSection('perfil')"
@@ -66,6 +208,7 @@
             Mi perfil
           </button>
 
+          <!-- Configuración -->
           <button
             type="button"
             (click)="openSection('configuracion')"
@@ -75,6 +218,7 @@
             Configuración
           </button>
 
+          <!-- Seguridad -->
           <button
             type="button"
             (click)="openSection('seguridad')"
@@ -95,9 +239,12 @@
             <span>⇥</span>
             Cerrar sesión
           </button>
+
         </div>
       }
 
     </div>
+
   </div>
+
 </header>
