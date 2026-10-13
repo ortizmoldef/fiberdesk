@@ -30,13 +30,13 @@
 
         <thead class="border-b border-slate-800 bg-slate-950">
           <tr>
-            <th class="px-6 py-4 font-medium text-slate-400">Incidencia</th>
-            <th class="px-6 py-4 font-medium text-slate-400">Cliente</th>
-            <th class="px-6 py-4 font-medium text-slate-400">Técnico</th>
-            <th class="px-6 py-4 font-medium text-slate-400">Prioridad</th>
-            <th class="px-6 py-4 font-medium text-slate-400">Estado</th>
-            <th class="px-6 py-4 font-medium text-slate-400">Fecha</th>
-            <th class="px-6 py-4 font-medium text-slate-400">Acciones</th>
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">Incidencia</th>
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">Cliente</th>
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">Técnico</th>
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">Prioridad</th>
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">Estado</th>
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">Fecha</th>
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">Acciones</th>
           </tr>
         </thead>
 
@@ -44,22 +44,22 @@
           @for (incident of incidents; track incident.id) {
             <tr class="transition hover:bg-slate-800/50">
 
-              <td class="px-6 py-4">
-                <p class="font-medium text-white">{{ incident.title }}</p>
-                <p class="mt-1 max-w-xs truncate text-xs text-slate-500">
+              <td class="px-6 py-4 text-center">
+                <p class="font-medium text-white " >{{ incident.title }}</p>
+                <p class="mx-auto mt-1 max-w-xs truncate text-center text-xs text-slate-500 ">
                   {{ incident.description }}
                 </p>
               </td>
 
-              <td class="px-6 py-4 text-slate-300">
+              <td class="px-6 py-4 text-slate-300 text-center">
                 {{ incident.clientName }}
               </td>
 
-              <td class="px-6 py-4 text-slate-300">
+              <td class="px-6 py-4 text-slate-300 text-center">
                 {{ incident.technician || 'Sin asignar' }}
               </td>
 
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center">
                 @if (incident.priority === 'Crítica') {
                   <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400">Crítica</span>
                 } @else if (incident.priority === 'Alta') {
@@ -71,7 +71,7 @@
                 }
               </td>
 
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center">
                 @if (incident.status === 'Abierta') {
                   <span class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">Abierta</span>
                 } @else if (incident.status === 'En curso') {
@@ -83,13 +83,13 @@
                 }
               </td>
 
-              <td class="px-6 py-4 text-slate-400">
+              <td class="px-6 py-4 text-slate-400 text-center">
                 {{ incident.createdAt || '—' }}
               </td>
 
              
 <td class="px-6 py-4">
-  <div class="flex items-center gap-2">
+  <div class="flex items-center gap-2 justify-center">
     <button
       type="button"
       (click)="editIncident(incident)"

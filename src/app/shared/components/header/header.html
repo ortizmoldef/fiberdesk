@@ -1,50 +1,103 @@
+
 <header class="flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-6 lg:px-8">
 
-  <!-- Left -->
+  <!-- Título -->
   <div>
-    <p class="text-sm text-slate-500">
-      Gestión de red
-    </p>
-
-    <h2 class="text-xl font-semibold text-white">
-      FiberDesk
-    </h2>
+    <p class="text-sm text-slate-500">Gestión de red</p>
+    <h2 class="text-xl font-semibold text-white">FiberDesk</h2>
   </div>
 
-
-  <!-- Right -->
+  <!-- Acciones de la derecha -->
   <div class="flex items-center gap-4">
 
-    <!-- Notifications -->
+    <!-- Notificaciones -->
     <button
       type="button"
+      aria-label="Notificaciones"
       class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-800 hover:text-white"
     >
       <span class="text-lg">♢</span>
-
       <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-cyan-400"></span>
     </button>
 
+    <!-- Perfil y menú desplegable -->
+    <div class="relative border-l border-slate-800 pl-4">
 
-    <!-- User -->
-    <div class="hidden items-center gap-3 border-l border-slate-800 pl-4 sm:flex">
+      <button
+        type="button"
+        (click)="toggleUserMenu(); $event.stopPropagation()"
+        [attr.aria-expanded]="isUserMenuOpen"
+        aria-haspopup="true"
+        class="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-800"
+      >
+        <div class="hidden text-right sm:block">
+          <p class="text-sm font-medium text-white">Fernando Ortiz</p>
+          <p class="text-xs text-slate-500">Administrador</p>
+        </div>
 
-      <div class="text-right">
-        <p class="text-sm font-medium text-white">
-          Fernando Ortiz
-        </p>
+        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/10 font-semibold text-cyan-400">
+          FO
+        </div>
 
-        <p class="text-xs text-slate-500">
-          Administrador
-        </p>
-      </div>
+        <span
+          class="text-xs text-slate-400 transition"
+          [class.rotate-180]="isUserMenuOpen"
+        >⌄</span>
+      </button>
 
-      <div class="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/10 font-semibold text-cyan-400">
-        FO
-      </div>
+      @if (isUserMenuOpen) {
+        <div
+          class="absolute right-0 top-full z-50 mt-3 w-60 rounded-xl border border-slate-800 bg-slate-900 p-2 shadow-2xl"
+          (click)="$event.stopPropagation()"
+        >
+          <!-- Cabecera del menú -->
+          <div class="border-b border-slate-800 px-3 py-3">
+            <p class="text-sm font-medium text-white">Fernando Ortiz</p>
+            <p class="mt-1 text-xs text-slate-500">Administrador</p>
+          </div>
+
+          <!-- Opciones -->
+          <button
+            type="button"
+            (click)="openSection('perfil')"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+          >
+            <span>♙</span>
+            Mi perfil
+          </button>
+
+          <button
+            type="button"
+            (click)="openSection('configuracion')"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+          >
+            <span>⚙</span>
+            Configuración
+          </button>
+
+          <button
+            type="button"
+            (click)="openSection('seguridad')"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+          >
+            <span>♧</span>
+            Seguridad
+          </button>
+
+          <div class="my-2 border-t border-slate-800"></div>
+
+          <!-- Cerrar sesión -->
+          <button
+            type="button"
+            (click)="logout()"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-red-400 transition hover:bg-red-500/10"
+          >
+            <span>⇥</span>
+            Cerrar sesión
+          </button>
+        </div>
+      }
 
     </div>
-
   </div>
-
 </header>

@@ -62,4 +62,10 @@ export class InstallationService {
     this.installations[index] = updatedInstallation;
   }
 }
+
+ deleteInstallation(id: number): void {
+    this.installations = this.installations.filter(
+      installation => installation.id !== id
+    );
+  }
 }

@@ -56,6 +56,20 @@ export class Installations {
     this.showForm = true;
   }
 
+
+  deleteInstallation(installation: Installation): void {
+    const confirmed = confirm(
+      `¿Seguro que quieres eliminar la instalación de "${installation.clientName}"?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.installationService.deleteInstallation(installation.id);
+    this.loadInstallations();
+  }
+
   closeForm(): void {
     this.showForm = false;
     this.editingInstallationId = null;

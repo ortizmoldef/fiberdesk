@@ -55,31 +55,31 @@
 
         <thead class="border-b border-slate-800 bg-slate-950">
           <tr>
-            <th class="px-6 py-4 font-medium text-slate-400">
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">
               Cliente
             </th>
 
-            <th class="px-6 py-4 font-medium text-slate-400">
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">
               Contacto
             </th>
 
-            <th class="px-6 py-4 font-medium text-slate-400">
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">
               Dirección
             </th>
 
-            <th class="px-6 py-4 font-medium text-slate-400">
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">
               Plan
             </th>
 
-            <th class="px-6 py-4 font-medium text-slate-400">
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">
               Estado
             </th>
 
-            <th class="px-6 py-4 font-medium text-slate-400">
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">
               Instalación
             </th>
 
-            <th class="px-23 py-4 text-right font-medium text-slate-400">
+            <th class="px-23 py-4 text-center font-medium text-slate-400">
               Acciones
             </th>
           </tr>
@@ -91,7 +91,7 @@
             <tr class="transition hover:bg-slate-800/50">
 
               <!-- Client -->
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center">
                 <div class="font-medium text-white">
                   {{ client.name }}
                 </div>
@@ -102,7 +102,7 @@
               </td>
 
               <!-- Contact -->
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center">
                 <div class="text-slate-300">
                   {{ client.email }}
                 </div>
@@ -113,17 +113,17 @@
               </td>
 
               <!-- Address -->
-              <td class="px-6 py-4 text-slate-400">
+              <td class="px-6 py-4 text-slate-400 text-center">
                 {{ client.address }}
               </td>
 
               <!-- Plan -->
-              <td class="px-6 py-4 text-slate-300">
+              <td class="px-6 py-4 text-slate-300 text-center">
                 {{ client.plan }}
               </td>
 
               <!-- Status -->
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center">
                 @if (client.status === 'Activo') {
                   <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
                     Activo
@@ -140,13 +140,13 @@
               </td>
 
               <!-- Installation date -->
-              <td class="px-6 py-4 text-slate-400">
+              <td class="px-6 py-4 text-slate-400 text-center">
                 {{ client.installationDate || 'Sin fecha' }}
               </td>
 
               <!-- Actions -->
-              <td class="px-6 py-4 text-right">
-              <div class="flex items-center justify-end gap-2">
+              <td class="px-6 py-4 text-center">
+              <div class="flex items-center  gap-2 justify-center">
 
               <!-- Botón editar -->
               <button

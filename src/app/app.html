@@ -1,19 +1,16 @@
 <div class="min-h-screen bg-slate-950 text-slate-100">
+@if (isLoginPage) {
+<router-outlet></router-outlet>
+} @else {
+<div class="flex min-h-screen">
+<app-sidebar></app-sidebar>
+  <main class="min-w-0 flex-1">
+    <app-header></app-header>
 
-  <div class="flex min-h-screen">
-
-    <app-sidebar></app-sidebar>
-
-    <main class="min-w-0 flex-1">
-
-      <app-header></app-header>
-
-      <div class="p-6 lg:p-8">
-        <router-outlet></router-outlet>
-      </div>
-
-    </main>
-
-  </div>
-
+    <div class="p-6 lg:p-8">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
+}
 </div>

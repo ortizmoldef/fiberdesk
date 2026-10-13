@@ -133,7 +133,6 @@ updateClient(): void {
 }
 
 
-
   deleteClient(client: Client): void {
     const confirmed = confirm(
       `¿Seguro que quieres eliminar al cliente "${client.name}"?`

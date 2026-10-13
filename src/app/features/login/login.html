@@ -1,0 +1,73 @@
+
+<div class="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-10">
+  <div class="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-2xl">
+
+    <div class="mb-8 text-center">
+      <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500 text-2xl font-bold text-slate-950">
+        F
+      </div>
+
+      <h1 class="text-2xl font-bold text-white">FiberDesk</h1>
+
+      <p class="mt-2 text-sm text-slate-400">
+        Accede a tu panel de gestión
+      </p>
+    </div>
+
+    <form (ngSubmit)="login()" #loginForm="ngForm" class="space-y-5">
+
+      <div>
+        <label for="email" class="mb-2 block text-sm font-medium text-slate-300">
+          Correo electrónico
+        </label>
+
+        <input
+          id="email"
+          name="email"
+          type="email"
+          [(ngModel)]="email"
+          required
+          email
+          placeholder="nombre@empresa.com"
+          class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="mb-2 block text-sm font-medium text-slate-300">
+          Contraseña
+        </label>
+
+        <input
+          id="password"
+          name="password"
+          type="password"
+          [(ngModel)]="password"
+          required
+          placeholder="Introduce tu contraseña"
+          class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500"
+        />
+      </div>
+
+      @if (errorMessage) {
+        <p class="rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400" role="alert">
+          {{ errorMessage }}
+        </p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid"
+        class="w-full rounded-lg bg-cyan-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Iniciar sesión
+      </button>
+
+    </form>
+
+    <p class="mt-6 text-center text-xs text-slate-500">
+      FiberDesk · Panel de administración
+    </p>
+
+  </div>
+</div>
