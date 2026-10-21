@@ -1,8 +1,10 @@
+
 import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { IncidentService } from '../../../core/services/incident.service';
 import { Incident } from '../../models/incident.model';
+import { User, UserRole } from '../../models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -18,16 +20,54 @@ export class Header {
     private incidentService: IncidentService,
   ) {}
 
-  // Incidencias que todavía requieren atención
+  // Usuario que ha iniciado sesión.
+  get currentUser(): User | null {
+    return this.authService.getCurrentUser();
+  }
+
+  // Nombre que se muestra en el perfil.
+  get displayName(): string {
+    return this.currentUser?.name ?? 'Usuario';
+  }
+
+  // Nombre del rol en español.
+  get displayRole(): string {
+    const roles: Record<UserRole, string> = {
+      admin: 'Administrador',
+      technician: 'Técnico',
+      supervisor: 'Supervisor',
+    };
+
+    const role = this.currentUser?.role;
+    return role ? roles[role] : 'Sin rol';
+  }
+
+  // Iniciales del usuario para el avatar.
+  get userInitials(): string {
+    const name = this.displayName.trim();
+
+    if (!name || name === 'Usuario') {
+      return 'U';
+    }
+
+    return name
+      .split(/\s+/)
+      .slice(0, 2)
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+  }
+
+  // Incidencias que todavía requieren atención.
   get pendingIncidents(): Incident[] {
     return this.incidentService.getIncidents().filter(
       incident =>
         incident.status !== 'Resuelta' &&
-        incident.status !== 'Cerrada'
+        incident.status !== 'Cerrada',
     );
   }
 
-  // Número de notificaciones pendientes
+  // Número de notificaciones pendientes.
   get notificationCount(): number {
     return this.pendingIncidents.length;
   }
@@ -39,8 +79,6 @@ export class Header {
 
   openIncident(incident: Incident): void {
     this.isNotificationsOpen = false;
-
-    // Navega a la sección de incidencias
     this.router.navigate(['/incidencias']);
   }
 
@@ -55,9 +93,6 @@ export class Header {
 
   openSection(section: string): void {
     this.closeUserMenu();
-
-    // Estas páginas se implementarán más adelante.
-    console.log(`Sección seleccionada: ${section}`);
   }
 
   logout(): void {
@@ -66,7 +101,7 @@ export class Header {
     this.authService.logout();
   }
 
-  // Cierra los menús al pulsar fuera de ellos
+  // Cierra los menús al pulsar fuera de ellos.
   @HostListener('document:click')
   onDocumentClick(): void {
     this.closeUserMenu();
