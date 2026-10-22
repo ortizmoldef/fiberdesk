@@ -1,7 +1,10 @@
 
 import { Routes } from '@angular/router';
 
-import { authGuard } from '../core/guards/auth.guard';
+import {
+  authGuard,
+  permissionGuard,
+} from '../core/guards/auth.guard';
 
 import { Dashboard } from '../features/dashboard/dashboard';
 import { Clients } from '../features/clients/clients';
@@ -18,30 +21,49 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [authGuard],
+    canActivateChild: [permissionGuard],
     children: [
       {
         path: '',
-        component: Dashboard,
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
       },
       {
         path: 'dashboard',
         component: Dashboard,
+        data: { permission: 'dashboard.view' },
       },
       {
         path: 'clientes',
         component: Clients,
+        data: { permission: 'clients.view' },
       },
       {
         path: 'instalaciones',
         component: Installations,
+        data: { permission: 'installations.view' },
       },
       {
         path: 'tecnicos',
         component: Technicians,
+        data: { permission: 'technicians.view' },
       },
       {
         path: 'incidencias',
         component: Incidents,
+        data: { permission: 'incidents.view' },
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('../features/users/users').then(m => m.Users),
+        data: { permission: 'users.view' },
+      },
+      
+      {
+        path: 'perfil',
+        loadComponent: () =>
+          import('../features/profile/profile').then(m => m.Profile),
       },
     ],
   },

@@ -4,9 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { Incident } from '../../shared/models/incident.model';
 import { IncidentService } from '../../core/services/incident.service';
+import { AuthService } from '../../core/services/auth.service';
+import { Permission } from '../../shared/models/permission.model';
 
 @Component({
   selector: 'app-incidents',
+  standalone: true,
   imports: [FormsModule],
   templateUrl: './incidents.html',
 })
@@ -16,20 +19,21 @@ export class Incidents {
   showForm = false;
   editingIncidentId: number | null = null;
 
-  newIncident: Omit<Incident, 'id'> = {
-    title: '',
-    description: '',
-    clientName: '',
-    technician: '',
-    priority: 'Media',
-    status: 'Abierta',
-    createdAt: '',
-  };
+  newIncident: Omit<Incident, 'id'> = this.createEmptyIncident();
 
   constructor(
-    private incidentService: IncidentService
+    private incidentService: IncidentService,
+    private authService: AuthService,
   ) {
     this.loadIncidents();
+  }
+
+  can(permission: Permission): boolean {
+    return this.authService.hasPermission(permission);
+  }
+
+  get isTechnician(): boolean {
+    return this.authService.hasRole('technician');
   }
 
   loadIncidents(): void {
@@ -37,12 +41,20 @@ export class Incidents {
   }
 
   openForm(): void {
+    if (!this.can('incidents.create')) {
+      return;
+    }
+
     this.editingIncidentId = null;
-    this.resetForm();
+    this.newIncident = this.createEmptyIncident();
     this.showForm = true;
   }
 
   editIncident(incident: Incident): void {
+    if (!this.can('incidents.edit')) {
+      return;
+    }
+
     this.editingIncidentId = incident.id;
 
     this.newIncident = {
@@ -59,8 +71,12 @@ export class Incidents {
   }
 
   deleteIncident(incident: Incident): void {
+    if (!this.can('incidents.delete')) {
+      return;
+    }
+
     const confirmed = confirm(
-      `¿Seguro que quieres eliminar la incidencia "${incident.title}"?`
+      `¿Seguro que quieres eliminar la incidencia "${incident.title}"?`,
     );
 
     if (!confirmed) {
@@ -71,11 +87,10 @@ export class Incidents {
     this.loadIncidents();
   }
 
-
   closeForm(): void {
     this.showForm = false;
     this.editingIncidentId = null;
-    this.resetForm();
+    this.newIncident = this.createEmptyIncident();
   }
 
   saveIncident(): void {
@@ -86,14 +101,43 @@ export class Incidents {
       return;
     }
 
+    // Edición de una incidencia existente.
     if (this.editingIncidentId !== null) {
-      const updatedIncident: Incident = {
-        id: this.editingIncidentId,
-        ...this.newIncident,
-      };
+      if (!this.can('incidents.edit')) {
+        return;
+      }
+
+      const originalIncident = this.incidents.find(
+        incident => incident.id === this.editingIncidentId,
+      );
+
+      if (!originalIncident) {
+        return;
+      }
+
+      let updatedIncident: Incident;
+
+      if (this.isTechnician) {
+        // El técnico solo puede modificar descripción y estado.
+        updatedIncident = {
+          ...originalIncident,
+          description: this.newIncident.description,
+          status: this.newIncident.status,
+        };
+      } else {
+        updatedIncident = {
+          id: this.editingIncidentId,
+          ...this.newIncident,
+        };
+      }
 
       this.incidentService.updateIncident(updatedIncident);
     } else {
+      // Creación de una incidencia.
+      if (!this.can('incidents.create')) {
+        return;
+      }
+
       const newIncident: Incident = {
         id: this.incidents.length > 0
           ? Math.max(...this.incidents.map(incident => incident.id)) + 1
@@ -108,8 +152,8 @@ export class Incidents {
     this.closeForm();
   }
 
-  resetForm(): void {
-    this.newIncident = {
+  private createEmptyIncident(): Omit<Incident, 'id'> {
+    return {
       title: '',
       description: '',
       clientName: '',
@@ -119,7 +163,4 @@ export class Incidents {
       createdAt: '',
     };
   }
-
-  
-
 }

@@ -1,0 +1,225 @@
+
+<div class="space-y-6">
+
+  <!-- Cabecera -->
+  <div>
+    <p class="text-sm font-medium text-cyan-400">Cuenta personal</p>
+
+    <h1 class="mt-1 text-3xl font-bold tracking-tight text-white">
+      Mi perfil
+    </h1>
+
+    <p class="mt-2 text-sm text-slate-400">
+      Consulta y actualiza tu información personal en FiberDesk.
+    </p>
+  </div>
+
+  <!-- Mensajes -->
+  @if (errorMessage) {
+    <div
+      class="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div
+      class="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300"
+      role="status"
+    >
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (currentUser) {
+    <!-- Tarjeta de identidad -->
+    <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+
+      <div class="border-b border-slate-800 bg-slate-950/50 px-6 py-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+
+          <div
+            class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/10 text-xl font-bold text-cyan-400"
+          >
+            {{ userInitials }}
+          </div>
+
+          <div class="min-w-0 flex-1">
+            <h2 class="text-xl font-semibold text-white">
+              {{ currentUser.name }}
+            </h2>
+
+            <p class="mt-1 break-all text-sm text-slate-400">
+              {{ currentUser.email }}
+            </p>
+
+            <div class="mt-3 flex flex-wrap items-center gap-2">
+              <span
+                class="inline-flex rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1 text-xs font-medium text-cyan-400"
+              >
+                {{ displayRole }}
+              </span>
+
+              <span
+                class="inline-flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400"
+              >
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                Cuenta activa
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Formulario de información personal -->
+      <div class="p-6">
+
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold text-white">
+            Información personal
+          </h3>
+
+          <p class="mt-1 text-sm text-slate-400">
+            Modifica tu nombre y correo electrónico.
+          </p>
+        </div>
+
+        <form
+          (ngSubmit)="saveProfile()"
+          class="grid grid-cols-1 gap-5 md:grid-cols-2"
+        >
+
+          <div>
+            <label
+              for="profileName"
+              class="mb-2 block text-sm font-medium text-slate-300"
+            >
+              Nombre completo
+            </label>
+
+            <input
+              id="profileName"
+              name="name"
+              type="text"
+              [(ngModel)]="form.name"
+              required
+              maxlength="100"
+              autocomplete="name"
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500"
+              placeholder="Tu nombre y apellidos"
+            />
+          </div>
+
+          <div>
+            <label
+              for="profileEmail"
+              class="mb-2 block text-sm font-medium text-slate-300"
+            >
+              Correo electrónico
+            </label>
+
+            <input
+              id="profileEmail"
+              name="email"
+              type="email"
+              [(ngModel)]="form.email"
+              required
+              maxlength="254"
+              autocomplete="email"
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500"
+              placeholder="tu@fiberdesk.com"
+            />
+          </div>
+
+          <!-- Rol: solo lectura -->
+          <div>
+            <label
+              for="profileRole"
+              class="mb-2 block text-sm font-medium text-slate-300"
+            >
+              Rol asignado
+            </label>
+
+            <input
+              id="profileRole"
+              name="role"
+              type="text"
+              [value]="displayRole"
+              readonly
+              class="w-full cursor-not-allowed rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-500 outline-none"
+            />
+
+            <p class="mt-2 text-xs text-slate-500">
+              El rol y los permisos los gestiona un administrador.
+            </p>
+          </div>
+
+          <!-- Estado: solo lectura -->
+          <div>
+            <label
+              for="profileStatus"
+              class="mb-2 block text-sm font-medium text-slate-300"
+            >
+              Estado de la cuenta
+            </label>
+
+            <input
+              id="profileStatus"
+              name="status"
+              type="text"
+              value="Activa"
+              readonly
+              class="w-full cursor-not-allowed rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-slate-500 outline-none"
+            />
+          </div>
+
+          <!-- Acciones -->
+          <div
+            class="flex flex-wrap justify-end gap-3 border-t border-slate-800 pt-5 md:col-span-2"
+          >
+            <button
+              type="button"
+              (click)="cancelChanges()"
+              class="rounded-xl border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-slate-800"
+            >
+              Descartar cambios
+            </button>
+
+            <button
+              type="submit"
+              [disabled]="isSaving"
+              class="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- Información de seguridad -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+      <div class="flex items-start gap-4">
+        <div
+          class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400"
+        >
+          <span class="text-xl">♧</span>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-white">Seguridad de la cuenta</h3>
+
+          <p class="mt-1 text-sm leading-6 text-slate-400">
+            Mantén tus credenciales protegidas. El cambio de contraseña
+            se puede gestionar desde la sección de seguridad cuando
+            esté habilitada para tu cuenta.
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

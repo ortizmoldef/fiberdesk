@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { Technician } from '../../shared/models/technician.model';
 import { TechnicianService } from '../../core/services/technician.service';
+import { AuthService } from '../../core/services/auth.service';
+import { Permission } from '../../shared/models/permission.model';
 
 @Component({
   selector: 'app-technicians',
@@ -12,7 +14,6 @@ import { TechnicianService } from '../../core/services/technician.service';
   templateUrl: './technicians.html',
 })
 export class Technicians {
-
   technicians: Technician[] = [];
 
   showForm = false;
@@ -21,17 +22,20 @@ export class Technicians {
   formData: Technician = this.createEmptyTechnician();
 
   constructor(
-    private technicianService: TechnicianService
+    private technicianService: TechnicianService,
+    private authService: AuthService,
   ) {
     this.loadTechnicians();
   }
 
-  // Cargar técnicos
+  can(permission: Permission): boolean {
+    return this.authService.hasPermission(permission);
+  }
+
   loadTechnicians(): void {
     this.technicians = this.technicianService.getTechnicians();
   }
 
-  // Crear un formulario vacío
   private createEmptyTechnician(): Technician {
     return {
       id: 0,
@@ -44,15 +48,18 @@ export class Technicians {
     };
   }
 
-  // Abrir el formulario para editar
   editTechnician(technician: Technician): void {
+    if (!this.can('technicians.edit')) return;
+
     this.formData = { ...technician };
     this.editing = true;
     this.showForm = true;
   }
 
-  // Guardar los cambios
   saveTechnician(): void {
+    if (!this.can('technicians.edit')) return;
+    if (!this.editing) return;
+
     if (
       !this.formData.name.trim() ||
       !this.formData.email.trim() ||
@@ -62,22 +69,17 @@ export class Technicians {
       return;
     }
 
-    if (this.editing) {
-      const updated = this.technicianService.updateTechnician(
-        this.formData.id,
-        this.formData
-      );
+    const updated = this.technicianService.updateTechnician(
+      this.formData.id,
+      this.formData
+    );
 
-      if (!updated) {
-        return;
-      }
-    }
+    if (!updated) return;
 
     this.loadTechnicians();
     this.closeForm();
   }
 
-  // Cerrar el formulario
   closeForm(): void {
     this.showForm = false;
     this.editing = false;

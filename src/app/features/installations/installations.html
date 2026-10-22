@@ -13,13 +13,15 @@
       </p>
     </div>
 
-    <button
-      type="button"
-      (click)="openForm()"
-      class="rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
-    >
-      + Nueva instalación
-    </button>
+    @if (can('installations.create')) {
+        <button
+          type="button"
+          (click)="openForm()"
+          class="rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+        >
+          + Nueva instalación
+        </button>
+      }
   </div>
 
   <!-- Tabla -->
@@ -35,7 +37,11 @@
             <th class="px-6 py-4 text-center font-medium text-slate-400">Fecha</th>
             <th class="px-6 py-4 text-center font-medium text-slate-400">Plan</th>
             <th class="px-6 py-4 text-center font-medium text-slate-400">Estado</th>
-            <th class="px-4 py-4 text-center font-medium text-slate-400 whitespace-nowrap">Acciones</th>
+            @if (can('installations.edit') || can('installations.delete')) {
+              <th class="px-4 py-4 text-center font-medium text-slate-400 whitespace-nowrap">
+                Acciones
+              </th>
+            }
           </tr>
         </thead>
 
@@ -83,53 +89,57 @@
                 }
               </td>
 
-          <td class="px-3 py-4 whitespace-nowrap">
-                        
-              <!-- Botones de acciones -->
+          @if (can('installations.edit') || can('installations.delete')) {
+            <td class="px-3 py-4 whitespace-nowrap">
               <div class="flex items-center justify-center gap-2 whitespace-nowrap">
 
-                <!-- Botón editar -->
-                <button
-                  type="button"
-                  (click)="editInstallation(installation)"
-                  class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 shadow-lg shadow-blue-500/20 transition hover:border-cyan-400/60 hover:text-cyan-300 hover:shadow-blue-500/30"
-                >
-                  Editar
-                </button>
-
-                <!-- Botón eliminar -->
-                <button
-                  type="button"
-                  (click)="deleteInstallation(installation)"
-                  class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-400 transition hover:border-red-400/60 hover:bg-red-500/10"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-3.5 w-3.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="1.8"
+                @if (can('installations.edit')) {
+                  <button
+                    type="button"
+                    (click)="editInstallation(installation)"
+                    class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 shadow-lg shadow-blue-500/20 transition hover:border-cyan-400/60 hover:text-cyan-300 hover:shadow-blue-500/30"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M6 7h12M10 11v6m4-6v6M9 7V4h6v3m-8 0 1 13h8l1-13"
-                    />
-                  </svg>
-                  Eliminar
-                </button>
+                    Editar
+                  </button>
+                }
+
+                @if (can('installations.delete')) {
+                  <button
+                    type="button"
+                    (click)="deleteInstallation(installation)"
+                    class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-400 transition hover:border-red-400/60 hover:bg-red-500/10"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3.5 w-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 7h12M10 11v6m4-6v6M9 7V4h6v3m-8 0 1 13h8l1-13"
+                      />
+                    </svg>
+                    Eliminar
+                  </button>
+                }
 
               </div>
-
-          </td>
+            </td>
+          }
 
             </tr>
           } @empty {
             <tr>
-              <td colspan="7" class="px-6 py-10 text-center text-slate-500">
-                No hay instalaciones registradas.
-              </td>
+              <td
+              [attr.colspan]="can('installations.edit') || can('installations.delete') ? 7 : 6"
+              class="px-6 py-10 text-center text-slate-500"
+            >
+              No hay instalaciones registradas.
+            </td>
             </tr>
           }
         </tbody>

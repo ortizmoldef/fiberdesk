@@ -4,9 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { Installation } from '../../shared/models/installation.model';
 import { InstallationService } from '../../core/services/installation.service';
+import { AuthService } from '../../core/services/auth.service';
+import { Permission } from '../../shared/models/permission.model';
 
 @Component({
   selector: 'app-installations',
+  standalone: true,
   imports: [FormsModule],
   templateUrl: './installations.html',
 })
@@ -16,19 +19,18 @@ export class Installations {
   showForm = false;
   editingInstallationId: number | null = null;
 
-  newInstallation: Omit<Installation, 'id'> = {
-    clientName: '',
-    address: '',
-    technician: '',
-    date: '',
-    status: 'Programada',
-    plan: 'FTTH 600 Mbps',
-  };
+  newInstallation: Omit<Installation, 'id'> =
+    this.createEmptyInstallation();
 
   constructor(
-    private installationService: InstallationService
+    private installationService: InstallationService,
+    private authService: AuthService,
   ) {
     this.loadInstallations();
+  }
+
+  can(permission: Permission): boolean {
+    return this.authService.hasPermission(permission);
   }
 
   loadInstallations(): void {
@@ -36,12 +38,16 @@ export class Installations {
   }
 
   openForm(): void {
+    if (!this.can('installations.create')) return;
+
     this.editingInstallationId = null;
-    this.resetForm();
+    this.newInstallation = this.createEmptyInstallation();
     this.showForm = true;
   }
 
   editInstallation(installation: Installation): void {
+    if (!this.can('installations.edit')) return;
+
     this.editingInstallationId = installation.id;
 
     this.newInstallation = {
@@ -56,15 +62,14 @@ export class Installations {
     this.showForm = true;
   }
 
-
   deleteInstallation(installation: Installation): void {
+    if (!this.can('installations.delete')) return;
+
     const confirmed = confirm(
       `¿Seguro que quieres eliminar la instalación de "${installation.clientName}"?`
     );
 
-    if (!confirmed) {
-      return;
-    }
+    if (!confirmed) return;
 
     this.installationService.deleteInstallation(installation.id);
     this.loadInstallations();
@@ -73,7 +78,7 @@ export class Installations {
   closeForm(): void {
     this.showForm = false;
     this.editingInstallationId = null;
-    this.resetForm();
+    this.newInstallation = this.createEmptyInstallation();
   }
 
   saveInstallation(): void {
@@ -87,6 +92,8 @@ export class Installations {
     }
 
     if (this.editingInstallationId !== null) {
+      if (!this.can('installations.edit')) return;
+
       const updatedInstallation: Installation = {
         id: this.editingInstallationId,
         ...this.newInstallation,
@@ -94,6 +101,8 @@ export class Installations {
 
       this.installationService.updateInstallation(updatedInstallation);
     } else {
+      if (!this.can('installations.create')) return;
+
       const newInstallation: Installation = {
         id: this.installations.length > 0
           ? Math.max(...this.installations.map(item => item.id)) + 1
@@ -108,8 +117,8 @@ export class Installations {
     this.closeForm();
   }
 
-  resetForm(): void {
-    this.newInstallation = {
+  private createEmptyInstallation(): Omit<Installation, 'id'> {
+    return {
       clientName: '',
       address: '',
       technician: '',

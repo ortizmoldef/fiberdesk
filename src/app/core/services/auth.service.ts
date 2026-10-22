@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -7,6 +6,7 @@ import {
   Permission,
   ROLE_PERMISSIONS,
 } from '../../shared/models/permission.model';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,75 +15,23 @@ export class AuthService {
   private readonly tokenKey = 'fiberdesk_token';
   private readonly userKey = 'fiberdesk_user';
 
-  // Cuentas temporales para desarrollo.
-  private readonly testUsers: {
-    email: string;
-    password: string;
-    user: User;
-  }[] = [
-    {
-      email: 'admin@fiberdesk.com',
-      password: 'FiberDesk123',
-      user: {
-        id: 1,
-        name: 'Administrador FiberDesk',
-        email: 'admin@fiberdesk.com',
-        role: 'admin',
-        active: true,
-        createdAt: new Date().toISOString(),
-      },
-    },
-    {
-      email: 'tecnico@fiberdesk.com',
-      password: 'Tecnico123',
-      user: {
-        id: 2,
-        name: 'Técnico de prueba',
-        email: 'tecnico@fiberdesk.com',
-        role: 'technician',
-        active: true,
-        createdAt: new Date().toISOString(),
-      },
-    },
-    {
-      email: 'supervisor@fiberdesk.com',
-      password: 'Supervisor123',
-      user: {
-        id: 3,
-        name: 'Supervisor de prueba',
-        email: 'supervisor@fiberdesk.com',
-        role: 'supervisor',
-        active: true,
-        createdAt: new Date().toISOString(),
-      },
-    },
-  ];
-
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private userService: UserService,
+  ) {}
 
   /**
    * Inicio de sesión provisional para desarrollo.
    */
   login(email: string, password: string): boolean {
-    const normalizedEmail = email.trim().toLowerCase();
+    const user = this.userService.authenticate(email, password);
 
-    const account = this.testUsers.find(
-      user =>
-        user.email.toLowerCase() === normalizedEmail &&
-        user.password === password &&
-        user.user.active,
-    );
-
-    if (!account) {
-      return false;
-    }
-
-    if (typeof localStorage === 'undefined') {
+    if (!user || typeof localStorage === 'undefined') {
       return false;
     }
 
     localStorage.setItem(this.tokenKey, 'development-token');
-    localStorage.setItem(this.userKey, JSON.stringify(account.user));
+    localStorage.setItem(this.userKey, JSON.stringify(user));
 
     return true;
   }
@@ -100,10 +48,14 @@ export class AuthService {
   }
 
   /**
-   * Devuelve el usuario de la sesión actual.
+   * Devuelve los datos actuales del usuario.
+   * Sincroniza nombre, correo y rol con UserService.
    */
   getCurrentUser(): User | null {
-    if (typeof localStorage === 'undefined') {
+    if (
+      typeof localStorage === 'undefined' ||
+      !this.getToken()
+    ) {
       return null;
     }
 
@@ -114,14 +66,36 @@ export class AuthService {
     }
 
     try {
-      return JSON.parse(storedUser) as User;
+      const sessionUser = JSON.parse(storedUser) as User;
+
+      if (typeof sessionUser.id !== 'number') {
+        this.clearSession();
+        return null;
+      }
+
+      const currentUser = this.userService.getUserById(sessionUser.id);
+
+      // Si el usuario ya no existe o está desactivado,
+      // se invalida su sesión.
+      if (!currentUser || !currentUser.active) {
+        this.logout();
+        return null;
+      }
+
+      // Actualiza los datos guardados si han cambiado.
+      if (JSON.stringify(sessionUser) !== JSON.stringify(currentUser)) {
+        localStorage.setItem(this.userKey, JSON.stringify(currentUser));
+      }
+
+      return currentUser;
     } catch {
+      this.clearSession();
       return null;
     }
   }
 
   /**
-   * Comprueba si hay una sesión provisional.
+   * Comprueba si existe una sesión válida.
    */
   isAuthenticated(): boolean {
     return !!this.getToken() && !!this.getCurrentUser();
@@ -135,12 +109,12 @@ export class AuthService {
   }
 
   /**
-   * Comprueba si el rol tiene un permiso.
+   * Comprueba los permisos del usuario actual.
    */
   hasPermission(permission: Permission): boolean {
     const user = this.getCurrentUser();
 
-    if (!user || !user.active) {
+    if (!user) {
       return false;
     }
 
@@ -148,14 +122,22 @@ export class AuthService {
   }
 
   /**
-   * Cierra la sesión y elimina los datos locales.
+   * Elimina los datos de sesión sin navegar.
    */
-  logout(): void {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem(this.tokenKey);
-      localStorage.removeItem(this.userKey);
+  private clearSession(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
     }
 
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userKey);
+  }
+
+  /**
+   * Cierra la sesión y vuelve al login.
+   */
+  logout(): void {
+    this.clearSession();
     this.router.navigate(['/login']);
   }
 }

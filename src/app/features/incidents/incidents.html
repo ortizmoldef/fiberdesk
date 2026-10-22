@@ -10,17 +10,20 @@
       </p>
     </div>
 
-    <button
-      type="button"
-      (click)="openForm()"
-      class="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-      </svg>
-      Nueva incidencia
-    </button>
+    @if (can('incidents.create')) {
+  <!-- Aquí mantén el botón actual de Nueva incidencia -->
+  <button
+    type="button"
+    (click)="openForm()"
+    class="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+      fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+    </svg>
+    Nueva incidencia
+  </button>
+}
   </div>
 
   <!-- Tabla -->
@@ -36,7 +39,11 @@
             <th class="px-6 py-4 font-medium text-slate-400 text-center">Prioridad</th>
             <th class="px-6 py-4 font-medium text-slate-400 text-center">Estado</th>
             <th class="px-6 py-4 font-medium text-slate-400 text-center">Fecha</th>
-            <th class="px-6 py-4 font-medium text-slate-400 text-center">Acciones</th>
+            @if (can('incidents.edit') || can('incidents.delete')) {
+            <th class="px-6 py-4 font-medium text-slate-400 text-center">
+              Acciones
+            </th>
+            }
           </tr>
         </thead>
 
@@ -88,44 +95,39 @@
               </td>
 
              
-<td class="px-6 py-4">
-  <div class="flex items-center gap-2 justify-center">
-    <button
-      type="button"
-      (click)="editIncident(incident)"
-      class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 shadow-lg shadow-blue-500/20 transition hover:border-cyan-400/60 hover:text-cyan-300 hover:shadow-blue-500/30"
-    >
-      Editar
-    </button>
+@if (can('incidents.edit') || can('incidents.delete')) {
+  <td class="px-6 py-4">
+    <div class="flex items-center justify-center gap-2">
+      @if (can('incidents.edit')) {
+        <button
+          type="button"
+          (click)="editIncident(incident)"
+          class="inline-flex items-center justify-center rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 shadow-lg shadow-blue-500/20 transition hover:border-cyan-400/60 hover:text-cyan-300 hover:shadow-blue-500/30"
+        >
+          Editar
+        </button>
+      }
 
-    <button
-      type="button"
-      (click)="deleteIncident(incident)"
-      class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-400 transition hover:border-red-400/60 hover:bg-red-500/10"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-3.5 w-3.5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="1.8"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M6 7h12M10 11v6m4-6v6M9 7V4h6v3m-8 0 1 13h8l1-13"
-        />
-      </svg>
-      Eliminar
-    </button>
-  </div>
-</td>
+      @if (can('incidents.delete')) {
+        <button
+          type="button"
+          (click)="deleteIncident(incident)"
+          class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-400 transition hover:border-red-400/60 hover:bg-red-500/10"
+        >
+          Eliminar
+        </button>
+      }
+    </div>
+  </td>
+}
 
             </tr>
           } @empty {
             <tr>
-              <td colspan="7" class="px-6 py-12 text-center text-slate-500">
+              <td
+                [attr.colspan]="can('incidents.edit') || can('incidents.delete') ? 7 : 6"
+                class="px-6 py-12 text-center text-slate-500"
+              >
                 No hay incidencias registradas.
               </td>
             </tr>
@@ -180,8 +182,8 @@
               name="title"
               required
               [(ngModel)]="newIncident.title"
-              placeholder="Ej. Sin conexión a Internet"
-              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500"
+              [disabled]="isTechnician"
+              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
 
@@ -209,8 +211,9 @@
               name="clientName"
               required
               [(ngModel)]="newIncident.clientName"
+              [disabled]="isTechnician"
               placeholder="Nombre del cliente"
-              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500"
+              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
 
@@ -218,14 +221,16 @@
             <label for="technician" class="mb-1 block text-sm font-medium text-slate-300">
               Técnico
             </label>
-            <input
-              id="technician"
-              type="text"
-              name="technician"
-              [(ngModel)]="newIncident.technician"
-              placeholder="Nombre del técnico"
-              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500"
-            />
+              <input
+                id="technician"
+                type="text"
+                name="technician"
+                [(ngModel)]="newIncident.technician"
+                [disabled]="isTechnician"
+                placeholder="Nombre del técnico"
+                class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none transition focus:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+              />
+
           </div>
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -237,7 +242,8 @@
                 id="priority"
                 name="priority"
                 [(ngModel)]="newIncident.priority"
-                class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-cyan-500"
+                [disabled]="isTechnician"
+                class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <option value="Baja">Baja</option>
                 <option value="Media">Media</option>
@@ -273,7 +279,8 @@
               type="date"
               name="createdAt"
               [(ngModel)]="newIncident.createdAt"
-              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-cyan-500"
+              [disabled]="isTechnician"
+              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none focus:border-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
 

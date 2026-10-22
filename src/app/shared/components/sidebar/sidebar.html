@@ -39,14 +39,16 @@
     </a>
 
     <!-- Clientes -->
-    <a
-      routerLink="/clientes"
-      routerLinkActive="bg-cyan-500/10 text-cyan-400"
-      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
-    >
-      <span class="text-lg">♙</span>
-      Clientes
-    </a>
+    @if (can('clients.view')) {
+      <a
+        routerLink="/clientes"
+        routerLinkActive="bg-cyan-500/10 text-cyan-400"
+        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      >
+        <span class="text-lg">♙</span>
+        Clientes
+      </a>
+    }
 
     <!-- Instalaciones -->
     <a
@@ -59,14 +61,16 @@
     </a>
 
     <!-- Técnicos -->
-    <a
-      routerLink="/tecnicos"
-      routerLinkActive="bg-cyan-500/10 text-cyan-400"
-      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
-    >
-      <span class="text-lg">⚒</span>
-      Técnicos
-    </a>
+    @if (can('technicians.view')) {
+      <a
+        routerLink="/tecnicos"
+        routerLinkActive="bg-cyan-500/10 text-cyan-400"
+        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      >
+        <span class="text-lg">⚒</span>
+        Técnicos
+      </a>
+    }
 
     <!-- Incidencias -->
     <a
@@ -78,40 +82,58 @@
       Incidencias
     </a>
 
+    
+    <!-- Usuarios -->
+    @if (can('users.view')) {
+      <a
+        routerLink="/usuarios"
+        routerLinkActive="bg-cyan-500/10 text-cyan-400"
+        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      >
+        <span class="text-lg">♙</span>
+        Usuarios
+      </a>
+    }
+
   </nav>
 
-  <!-- Accesos rápidos -->
+
+
+<!-- Accesos rápidos -->
+@if (can('installations.create') || can('incidents.view')) {
   <div class="mx-4 mt-5 border-t border-slate-800 px-1 pt-5">
 
     <p class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
       Acceso rápido
     </p>
 
-    <!-- Acceso a instalaciones -->
-    <a
-      routerLink="/instalaciones"
-      class="group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
-    >
-      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-lg text-cyan-400 transition group-hover:bg-cyan-500/10">
-        +
-      </span>
+    @if (can('installations.create')) {
+      <a
+        routerLink="/instalaciones"
+        class="group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      >
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-lg text-cyan-400 transition group-hover:bg-cyan-500/10">
+          +
+        </span>
+        <span>Nueva instalación</span>
+      </a>
+    }
 
-      <span>Nueva instalación</span>
-    </a>
-
-    <!-- Acceso a incidencias -->
-    <a
-      routerLink="/incidencias"
-      class="group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
-    >
-      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-lg text-amber-400 transition group-hover:bg-amber-500/10">
-        !
-      </span>
-
-      <span>Ver incidencias</span>
-    </a>
+    @if (can('incidents.view')) {
+      <a
+        routerLink="/incidencias"
+        class="group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      >
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-lg text-amber-400 transition group-hover:bg-amber-500/10">
+          !
+        </span>
+        <span>Ver incidencias</span>
+      </a>
+    }
 
   </div>
+}
+
 
   <!-- Estado del sistema: abajo del todo -->
   <div class="mt-auto border-t border-slate-800 px-4 pb-3 pt-4">

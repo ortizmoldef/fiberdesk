@@ -1,0 +1,372 @@
+
+<div class="space-y-6">
+
+  <!-- Cabecera -->
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <p class="text-sm font-medium text-cyan-400">Administración</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight text-white">
+        Usuarios
+      </h1>
+      <p class="mt-2 text-sm text-slate-400">
+        Gestiona las cuentas, los roles y el acceso a FiberDesk.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="openCreateForm()"
+      class="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+    >
+      <span class="text-lg">+</span>
+      Nuevo usuario
+    </button>
+  </div>
+
+  <!-- Mensajes -->
+  @if (errorMessage) {
+    <div
+      class="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div
+      class="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300"
+      role="status"
+    >
+      {{ successMessage }}
+    </div>
+  }
+
+  <!-- Resumen -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+      <p class="text-sm text-slate-400">Total de usuarios</p>
+      <p class="mt-2 text-3xl font-bold text-white">
+        {{ users.length }}
+      </p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+      <p class="text-sm text-slate-400">Cuentas activas</p>
+      <p class="mt-2 text-3xl font-bold text-emerald-400">
+        {{ activeUsersCount }}
+      </p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+      <p class="text-sm text-slate-400">Cuentas desactivadas</p>
+      <p class="mt-2 text-3xl font-bold text-rose-400">
+        {{ inactiveUsersCount }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Formulario de creación y edición -->
+  @if (showForm) {
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+      <div class="mb-6 flex items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-semibold text-white">
+            {{ editingUserId === null ? 'Crear usuario' : 'Editar usuario' }}
+          </h2>
+          <p class="mt-1 text-sm text-slate-400">
+            Introduce los datos de la cuenta.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="closeForm()"
+          class="rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
+        >
+          Cancelar
+        </button>
+      </div>
+
+      <form
+        (ngSubmit)="saveUser()"
+        class="grid grid-cols-1 gap-5 md:grid-cols-2"
+      >
+        <div>
+          <label for="userName" class="mb-2 block text-sm font-medium text-slate-300">
+            Nombre completo
+          </label>
+          <input
+            id="userName"
+            name="name"
+            type="text"
+            [(ngModel)]="form.name"
+            required
+            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500"
+            placeholder="Nombre y apellidos"
+          />
+        </div>
+
+        <div>
+          <label for="userEmail" class="mb-2 block text-sm font-medium text-slate-300">
+            Correo electrónico
+          </label>
+          <input
+            id="userEmail"
+            name="email"
+            type="email"
+            [(ngModel)]="form.email"
+            required
+            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500"
+            placeholder="usuario@fiberdesk.com"
+          />
+        </div>
+
+        @if (editingUserId === null) {
+          <div>
+            <label for="userPassword" class="mb-2 block text-sm font-medium text-slate-300">
+              Contraseña inicial
+            </label>
+            <input
+              id="userPassword"
+              name="password"
+              type="password"
+              [(ngModel)]="form.password"
+              required
+              minlength="8"
+              autocomplete="new-password"
+              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+              placeholder="Mínimo 8 caracteres"
+            />
+          </div>
+        }
+
+        <div>
+          <label for="userRole" class="mb-2 block text-sm font-medium text-slate-300">
+            Rol
+          </label>
+          <select
+            id="userRole"
+            name="role"
+            [(ngModel)]="form.role"
+            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+          >
+            <option value="admin">Administrador</option>
+            <option value="supervisor">Supervisor</option>
+            <option value="technician">Técnico</option>
+          </select>
+        </div>
+
+        <label class="flex items-center gap-3 text-sm text-slate-300 md:col-span-2">
+          <input
+            type="checkbox"
+            name="active"
+            [(ngModel)]="form.active"
+            class="h-4 w-4 rounded border-slate-700 bg-slate-950 accent-cyan-400"
+          />
+          Cuenta activa
+        </label>
+
+        <div class="flex flex-wrap justify-end gap-3 border-t border-slate-800 pt-5 md:col-span-2">
+          <button
+            type="button"
+            (click)="closeForm()"
+            class="rounded-xl border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-slate-800"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="rounded-xl bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+          >
+            {{ editingUserId === null ? 'Crear usuario' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Formulario de cambio de contraseña -->
+  @if (changingPasswordUserId !== null) {
+    <div class="rounded-2xl border border-cyan-500/20 bg-slate-900 p-5 sm:p-6">
+      <div class="mb-6 flex items-start justify-between gap-3">
+        <div>
+          <p class="text-sm font-medium text-cyan-400">Seguridad</p>
+          <h2 class="mt-1 text-lg font-semibold text-white">
+            Cambiar contraseña
+          </h2>
+          <p class="mt-1 text-sm text-slate-400">
+            Usuario:
+            {{
+              users.find(user => user.id === changingPasswordUserId)?.name
+            }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="closePasswordForm()"
+          class="rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
+        >
+          Cancelar
+        </button>
+      </div>
+
+      <form
+        (ngSubmit)="savePassword()"
+        class="grid grid-cols-1 gap-5 md:grid-cols-2"
+      >
+        <div>
+          <label for="newPassword" class="mb-2 block text-sm font-medium text-slate-300">
+            Nueva contraseña
+          </label>
+          <input
+            id="newPassword"
+            name="newPassword"
+            type="password"
+            [(ngModel)]="passwordForm.newPassword"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500"
+            placeholder="Mínimo 8 caracteres"
+          />
+        </div>
+
+        <div>
+          <label for="confirmPassword" class="mb-2 block text-sm font-medium text-slate-300">
+            Confirmar contraseña
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            [(ngModel)]="passwordForm.confirmPassword"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500"
+            placeholder="Repite la nueva contraseña"
+          />
+        </div>
+
+        <div class="flex flex-wrap justify-end gap-3 border-t border-slate-800 pt-5 md:col-span-2">
+          <button
+            type="button"
+            (click)="closePasswordForm()"
+            class="rounded-xl border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-slate-800"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+          >
+            Guardar contraseña
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Tabla de usuarios -->
+  <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+    <div class="border-b border-slate-800 px-5 py-4">
+      <h2 class="font-semibold text-white">Listado de usuarios</h2>
+      <p class="mt-1 text-sm text-slate-400">
+        Cuentas registradas en el sistema.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-950/70 text-xs uppercase tracking-wider text-slate-500">
+          <tr>
+            <th class="px-5 py-4 font-semibold text-center">Usuario</th>
+            <th class="px-5 py-4 font-semibold text-center">Rol</th>
+            <th class="px-5 py-4 font-semibold text-center">Estado</th>
+            <th class="px-5 py-4 text-center font-semibold text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-800">
+          @for (user of users; track user.id) {
+            <tr class="transition hover:bg-slate-800/40 text-center">
+              <td class="px-5 py-4">
+                <p class="font-medium text-white">{{ user.name }}</p>
+                <p class="mt-1 text-xs text-slate-400">{{ user.email }}</p>
+              </td>
+
+              <td class="px-5 py-4 text-center">
+                <span class="inline-flex rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs font-medium text-slate-300">
+                  @switch (user.role) {
+                    @case ('admin') { Administrador }
+                    @case ('supervisor') { Supervisor }
+                    @case ('technician') { Técnico }
+                  }
+                </span>
+              </td>
+
+              <td class="px-5 py-4">
+                @if (user.active) {
+                  <span class="inline-flex items-center gap-2 text-xs font-medium text-emerald-400">
+                    <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                    Activo
+                  </span>
+                } @else {
+                  <span class="inline-flex items-center gap-2 text-xs font-medium text-rose-400">
+                    <span class="h-2 w-2 rounded-full bg-rose-400"></span>
+                    Inactivo
+                  </span>
+                }
+              </td>
+
+              <td class="px-5 py-4">
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    (click)="openEditForm(user)"
+                    class="rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 transition hover:bg-cyan-500/10"
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="openPasswordForm(user)"
+                    class="rounded-lg border border-violet-500/30 px-3 py-2 text-xs font-medium text-violet-400 transition hover:bg-violet-500/10"
+                  >
+                    Contraseña
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="toggleStatus(user)"
+                    [disabled]="user.id === authService.getCurrentUser()?.id && user.active"
+                    class="rounded-lg border px-3 py-2 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-40"
+                    [class.border-rose-500/30]="user.active"
+                    [class.text-rose-400]="user.active"
+                    [class.hover:bg-rose-500/10]="user.active"
+                    [class.border-emerald-500/30]="!user.active"
+                    [class.text-emerald-400]="!user.active"
+                    [class.hover:bg-emerald-500/10]="!user.active"
+                  >
+                    {{ user.active ? 'Desactivar' : 'Activar' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="px-5 py-12 text-center text-slate-500">
+                No hay usuarios registrados.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

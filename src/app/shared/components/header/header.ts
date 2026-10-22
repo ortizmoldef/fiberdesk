@@ -92,8 +92,12 @@ export class Header {
   }
 
   openSection(section: string): void {
-    this.closeUserMenu();
+  this.closeUserMenu();
+
+  if (section === 'perfil') {
+    this.router.navigate(['/perfil']);
   }
+}
 
   logout(): void {
     this.closeUserMenu();
