@@ -24,7 +24,7 @@ export class UserService {
         active: true,
         createdAt: new Date().toISOString(),
       },
-      password: 'FiberDesk123',
+      password: 'FiberDesk1234',
     },
     {
       user: {
@@ -262,6 +262,25 @@ export class UserService {
     this.saveCredentials(credentials);
 
     return true;
+  }
+
+  /**
+   * Comprueba si la contraseña actual de un usuario es correcta.
+   */
+  verifyPassword(id: number, currentPassword: string): boolean {
+    if (
+      !Number.isInteger(id) ||
+      id <= 0 ||
+      !currentPassword ||
+      typeof localStorage === 'undefined'
+    ) {
+      return false;
+    }
+
+    const credentials = this.loadCredentials();
+    const credential = credentials.find(item => item.user.id === id);
+
+    return credential?.password === currentPassword;
   }
 
   toggleUserStatus(id: number): boolean {

@@ -2,14 +2,43 @@
 <div class="space-y-6">
 
   <!-- Header -->
-  <div>
-    <h1 class="text-2xl font-bold text-white">
-      Técnicos
-    </h1>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-    <p class="mt-1 text-sm text-slate-400">
-      Gestiona el equipo técnico de FiberDesk.
-    </p>
+    <div>
+      <h1 class="text-2xl font-bold text-white">
+        Técnicos
+      </h1>
+
+      <p class="mt-1 text-sm text-slate-400">
+        Gestiona el equipo técnico de FiberDesk.
+      </p>
+    </div>
+
+    @if (can('technicians.edit')) {
+      <button
+        type="button"
+        (click)="openCreateForm()"
+        class="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+
+        Añadir técnico
+      </button>
+    }
+
   </div>
 
   <!-- Technician cards -->
@@ -19,7 +48,7 @@
 
       <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
 
-        <!-- Header -->
+        <!-- Technician header -->
         <div class="flex items-start justify-between gap-3">
 
           <div class="flex items-center gap-4">
@@ -57,7 +86,7 @@
 
         </div>
 
-        <!-- Information -->
+        <!-- Technician information -->
         <div class="mt-6 space-y-3">
 
           <div>
@@ -83,7 +112,7 @@
 
         </div>
 
-        <!-- Stats -->
+        <!-- Installations statistics -->
         <div class="mt-6 border-t border-slate-800 pt-5">
 
           <p class="text-xs text-slate-500">
@@ -124,11 +153,19 @@
 
       </div>
 
+    } @empty {
+
+      <div class="col-span-full rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">
+        <p class="text-sm text-slate-400">
+          No hay técnicos registrados.
+        </p>
+      </div>
+
     }
 
   </div>
 
-  <!-- Edit modal -->
+  <!-- Create / Edit modal -->
   @if (showForm) {
 
     <div
@@ -142,15 +179,19 @@
       >
 
         <!-- Modal header -->
-        <div class="mb-6 flex items-start justify-between">
+        <div class="mb-6 flex items-start justify-between gap-4">
 
           <div>
             <h2 class="text-xl font-bold text-white">
-              Editar técnico
+              {{ editing ? 'Editar técnico' : 'Añadir técnico' }}
             </h2>
 
             <p class="mt-1 text-sm text-slate-400">
-              Modifica los datos del técnico seleccionado.
+              {{
+                editing
+                  ? 'Modifica los datos del técnico seleccionado.'
+                  : 'Introduce los datos del nuevo técnico.'
+              }}
             </p>
           </div>
 
@@ -182,106 +223,177 @@
         <form
           #technicianForm="ngForm"
           (ngSubmit)="saveTechnician()"
+          novalidate
           class="space-y-4"
         >
+
+          <!-- General error -->
+          @if (validationErrors['general']) {
+            <p
+              class="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400"
+              role="alert"
+            >
+              {{ validationErrors['general'] }}
+            </p>
+          }
 
           <!-- Name -->
           <div>
             <label class="mb-2 block text-sm font-medium text-slate-300">
-              Nombre completo
+              Nombre completo <span class="text-red-400">*</span>
             </label>
 
             <input
               type="text"
               name="name"
               [(ngModel)]="formData.name"
+              (ngModelChange)="clearValidationError('name')"
               required
+              minlength="3"
+              maxlength="100"
+              [class.border-red-500]="validationErrors['name']"
+              [attr.aria-invalid]="!!validationErrors['name']"
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
               placeholder="Nombre del técnico"
             />
+
+            @if (validationErrors['name']) {
+              <p class="mt-1 text-xs text-red-400">
+                {{ validationErrors['name'] }}
+              </p>
+            }
           </div>
 
           <!-- Email -->
           <div>
             <label class="mb-2 block text-sm font-medium text-slate-300">
-              Correo electrónico
+              Correo electrónico <span class="text-red-400">*</span>
             </label>
 
             <input
               type="email"
               name="email"
               [(ngModel)]="formData.email"
+              (ngModelChange)="clearValidationError('email')"
               required
               email
+              maxlength="254"
+              [class.border-red-500]="validationErrors['email']"
+              [attr.aria-invalid]="!!validationErrors['email']"
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
               placeholder="tecnico@fiberdesk.com"
             />
+
+            @if (validationErrors['email']) {
+              <p class="mt-1 text-xs text-red-400">
+                {{ validationErrors['email'] }}
+              </p>
+            }
           </div>
 
           <!-- Phone -->
           <div>
             <label class="mb-2 block text-sm font-medium text-slate-300">
-              Teléfono
+              Teléfono <span class="text-red-400">*</span>
             </label>
 
             <input
               type="tel"
               name="phone"
               [(ngModel)]="formData.phone"
+              (ngModelChange)="clearValidationError('phone')"
               required
+              maxlength="20"
+              [class.border-red-500]="validationErrors['phone']"
+              [attr.aria-invalid]="!!validationErrors['phone']"
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
               placeholder="600 111 222"
             />
+
+            @if (validationErrors['phone']) {
+              <p class="mt-1 text-xs text-red-400">
+                {{ validationErrors['phone'] }}
+              </p>
+            }
           </div>
 
           <!-- Specialization -->
           <div>
             <label class="mb-2 block text-sm font-medium text-slate-300">
-              Especialización
+              Especialización <span class="text-red-400">*</span>
             </label>
 
             <input
               type="text"
               name="specialization"
               [(ngModel)]="formData.specialization"
+              (ngModelChange)="clearValidationError('specialization')"
               required
+              maxlength="100"
+              [class.border-red-500]="validationErrors['specialization']"
+              [attr.aria-invalid]="!!validationErrors['specialization']"
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
               placeholder="Instalaciones FTTH"
             />
+
+            @if (validationErrors['specialization']) {
+              <p class="mt-1 text-xs text-red-400">
+                {{ validationErrors['specialization'] }}
+              </p>
+            }
           </div>
 
           <!-- Status -->
           <div>
             <label class="mb-2 block text-sm font-medium text-slate-300">
-              Estado
+              Estado <span class="text-red-400">*</span>
             </label>
 
             <select
               name="status"
               [(ngModel)]="formData.status"
+              (ngModelChange)="clearValidationError('status')"
               required
+              [class.border-red-500]="validationErrors['status']"
+              [attr.aria-invalid]="!!validationErrors['status']"
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
             >
               <option value="Disponible">Disponible</option>
               <option value="Ocupado">Ocupado</option>
               <option value="Fuera de servicio">Fuera de servicio</option>
             </select>
+
+            @if (validationErrors['status']) {
+              <p class="mt-1 text-xs text-red-400">
+                {{ validationErrors['status'] }}
+              </p>
+            }
           </div>
 
           <!-- Installations -->
           <div>
             <label class="mb-2 block text-sm font-medium text-slate-300">
-              Instalaciones realizadas
+              Instalaciones realizadas <span class="text-red-400">*</span>
             </label>
 
             <input
               type="number"
               name="installations"
               [(ngModel)]="formData.installations"
+              (ngModelChange)="clearValidationError('installations')"
               required
               min="0"
+              step="1"
+              [class.border-red-500]="validationErrors['installations']"
+              [attr.aria-invalid]="!!validationErrors['installations']"
               class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
             />
+
+            @if (validationErrors['installations']) {
+              <p class="mt-1 text-xs text-red-400">
+                {{ validationErrors['installations'] }}
+              </p>
+            }
           </div>
 
           <!-- Actions -->
@@ -296,12 +408,11 @@
             </button>
 
             <button
-              type="submit"
-              [disabled]="technicianForm.invalid"
-              class="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Guardar cambios
-            </button>
+            type="submit"
+            class="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+          >
+            {{ editing ? 'Guardar cambios' : 'Crear técnico' }}
+          </button>
 
           </div>
 

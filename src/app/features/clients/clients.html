@@ -4,40 +4,25 @@
   <!-- Header -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-white">
-        Clientes
-      </h1>
-
+      <h1 class="text-2xl font-bold text-white">Clientes</h1>
       <p class="mt-1 text-sm text-slate-400">
         Gestiona los clientes de FiberDesk.
       </p>
     </div>
 
-    <!-- Botón nuevo cliente -->
-     @if (can('clients.create')) {
-    <button
-      type="button"
-      (click)="openForm()"
-      class="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
+    @if (can('clients.create')) {
+      <button
+        type="button"
+        (click)="openForm()"
+        class="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 4v16m8-8H4"
-        />
-      </svg>
-
-      Nuevo cliente
-    </button>
-  }
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Nuevo cliente
+      </button>
+    }
   </div>
 
   <!-- Search -->
@@ -54,79 +39,42 @@
   <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
     <div class="overflow-x-auto">
       <table class="w-full text-left text-sm">
-
         <thead class="border-b border-slate-800 bg-slate-950">
           <tr>
-            <th class="px-6 py-4 font-medium text-slate-400 text-center">
-              Cliente
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400 text-center">
-              Contacto
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400 text-center">
-              Dirección
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400 text-center">
-              Plan
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400 text-center">
-              Estado
-            </th>
-
-            <th class="px-6 py-4 font-medium text-slate-400 text-center">
-              Instalación
-            </th>
+            <th class="px-6 py-4 text-center font-medium text-slate-400">Cliente</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-400">Contacto</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-400">Dirección</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-400">Plan</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-400">Estado</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-400">Instalación</th>
 
             @if (can('clients.edit') || can('clients.delete')) {
-              <th class="px-6 py-4 text-center font-medium text-slate-400">
-                Acciones
-              </th>
+              <th class="px-6 py-4 text-center font-medium text-slate-400">Acciones</th>
             }
           </tr>
         </thead>
 
         <tbody class="divide-y divide-slate-800">
-
           @for (client of filteredClients; track client.id) {
             <tr class="transition hover:bg-slate-800/50">
-
-              <!-- Client -->
               <td class="px-6 py-4 text-center">
-                <div class="font-medium text-white">
-                  {{ client.name }}
-                </div>
-
-                <div class="mt-1 text-xs text-slate-500">
-                  ID #{{ client.id }}
-                </div>
+                <div class="font-medium text-white">{{ client.name }}</div>
+                <div class="mt-1 text-xs text-slate-500">ID #{{ client.id }}</div>
               </td>
 
-              <!-- Contact -->
               <td class="px-6 py-4 text-center">
-                <div class="text-slate-300">
-                  {{ client.email }}
-                </div>
-
-                <div class="mt-1 text-xs text-slate-500">
-                  {{ client.phone }}
-                </div>
+                <div class="text-slate-300">{{ client.email }}</div>
+                <div class="mt-1 text-xs text-slate-500">{{ client.phone }}</div>
               </td>
 
-              <!-- Address -->
-              <td class="px-6 py-4 text-slate-400 text-center">
-                {{ client.address }}
+              <td class="px-6 py-4 text-center text-slate-400">
+                {{ client.address || 'Sin dirección' }}
               </td>
 
-              <!-- Plan -->
-              <td class="px-6 py-4 text-slate-300 text-center">
+              <td class="px-6 py-4 text-center text-slate-300">
                 {{ client.plan }}
               </td>
 
-              <!-- Status -->
               <td class="px-6 py-4 text-center">
                 @if (client.status === 'Activo') {
                   <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
@@ -143,34 +91,23 @@
                 }
               </td>
 
-              <!-- Installation date -->
-              <td class="px-6 py-4 text-slate-400 text-center">
+              <td class="px-6 py-4 text-center text-slate-400">
                 {{ client.installationDate || 'Sin fecha' }}
               </td>
 
               @if (can('clients.edit') || can('clients.delete')) {
                 <td class="px-6 py-4 text-center">
                   <div class="flex items-center justify-center gap-2">
-
                     @if (can('clients.edit')) {
                       <button
                         type="button"
                         (click)="editClient(client)"
                         class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 shadow-lg shadow-blue-500/20 transition hover:border-cyan-400/60 hover:text-cyan-300 hover:shadow-blue-500/30"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-3.5 w-3.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          stroke-width="1.8"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M16.862 4.487l2.651 2.651M8 16l-1 4 4-1L19.5 10.5a2.121 2.121 0 00-3-3L8 16z"
-                          />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                          fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.862 4.487l2.651 2.651M8 16l-1 4 4-1L19.5 10.5a2.121 2.121 0 00-3-3L8 16z" />
                         </svg>
                         Editar
                       </button>
@@ -182,24 +119,14 @@
                         (click)="deleteClient(client)"
                         class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-400 transition hover:border-red-400/60 hover:bg-red-500/10"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-3.5 w-3.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          stroke-width="1.8"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 7h12M10 11v6m4-6v6M9 7V4h6v3m-8 0 1 13h8l1-13"
-                          />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                          fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 7h12M10 11v6m4-6v6M9 7V4h6v3m-8 0 1 13h8l1-13" />
                         </svg>
                         Eliminar
                       </button>
                     }
-
                   </div>
                 </td>
               }
@@ -210,10 +137,7 @@
                 [attr.colspan]="can('clients.edit') || can('clients.delete') ? 7 : 6"
                 class="px-6 py-12 text-center"
               >
-                <div class="text-slate-400">
-                  No se encontraron clientes.
-                </div>
-
+                <div class="text-slate-400">No se encontraron clientes.</div>
                 <div class="mt-1 text-sm text-slate-600">
                   Prueba con otro término de búsqueda.
                 </div>
@@ -239,7 +163,6 @@
           <h2 class="text-lg font-semibold text-white">
             {{ editingClientId === null ? 'Nuevo cliente' : 'Editar cliente' }}
           </h2>
-
           <p class="mt-1 text-sm text-slate-500">
             {{ editingClientId === null
               ? 'Añade un nuevo cliente a FiberDesk.'
@@ -250,6 +173,7 @@
         <button
           type="button"
           (click)="closeForm()"
+          aria-label="Cerrar formulario"
           class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-800 hover:text-white"
         >
           ✕
@@ -260,15 +184,13 @@
       <form
         (ngSubmit)="editingClientId === null ? addClient() : updateClient()"
         class="space-y-5 p-6"
+        novalidate
       >
 
         <!-- Name -->
         <div>
-          <label
-            for="name"
-            class="mb-2 block text-sm font-medium text-slate-300"
-          >
-            Nombre completo
+          <label for="name" class="mb-2 block text-sm font-medium text-slate-300">
+            Nombre completo *
           </label>
 
           <input
@@ -276,20 +198,29 @@
             name="name"
             type="text"
             [(ngModel)]="newClient.name"
+            (ngModelChange)="clearValidationError('name')"
             placeholder="Ej. Carlos Fernández"
+            minlength="3"
+            maxlength="100"
             required
-            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+            [attr.aria-invalid]="!!validationErrors['name']"
+            class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+            [class.border-red-500]="validationErrors['name']"
+            [class.border-slate-700]="!validationErrors['name']"
           />
+
+          @if (validationErrors['name']) {
+            <p class="mt-1 text-xs text-red-400" role="alert">
+              {{ validationErrors['name'] }}
+            </p>
+          }
         </div>
 
         <!-- Email + phone -->
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
-            <label
-              for="email"
-              class="mb-2 block text-sm font-medium text-slate-300"
-            >
-              Email
+            <label for="email" class="mb-2 block text-sm font-medium text-slate-300">
+              Email *
             </label>
 
             <input
@@ -297,18 +228,26 @@
               name="email"
               type="email"
               [(ngModel)]="newClient.email"
+              (ngModelChange)="clearValidationError('email')"
               placeholder="cliente@email.com"
+              maxlength="254"
               required
-              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+              [attr.aria-invalid]="!!validationErrors['email']"
+              class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+              [class.border-red-500]="validationErrors['email']"
+              [class.border-slate-700]="!validationErrors['email']"
             />
+
+            @if (validationErrors['email']) {
+              <p class="mt-1 text-xs text-red-400" role="alert">
+                {{ validationErrors['email'] }}
+              </p>
+            }
           </div>
 
           <div>
-            <label
-              for="phone"
-              class="mb-2 block text-sm font-medium text-slate-300"
-            >
-              Teléfono
+            <label for="phone" class="mb-2 block text-sm font-medium text-slate-300">
+              Teléfono *
             </label>
 
             <input
@@ -316,19 +255,27 @@
               name="phone"
               type="tel"
               [(ngModel)]="newClient.phone"
+              (ngModelChange)="clearValidationError('phone')"
               placeholder="600 123 456"
+              maxlength="20"
               required
-              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+              [attr.aria-invalid]="!!validationErrors['phone']"
+              class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+              [class.border-red-500]="validationErrors['phone']"
+              [class.border-slate-700]="!validationErrors['phone']"
             />
+
+            @if (validationErrors['phone']) {
+              <p class="mt-1 text-xs text-red-400" role="alert">
+                {{ validationErrors['phone'] }}
+              </p>
+            }
           </div>
         </div>
 
         <!-- Address -->
         <div>
-          <label
-            for="address"
-            class="mb-2 block text-sm font-medium text-slate-300"
-          >
+          <label for="address" class="mb-2 block text-sm font-medium text-slate-300">
             Dirección
           </label>
 
@@ -337,52 +284,77 @@
             name="address"
             type="text"
             [(ngModel)]="newClient.address"
+            (ngModelChange)="clearValidationError('address')"
             placeholder="Calle, número, localidad..."
-            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+            maxlength="200"
+            [attr.aria-invalid]="!!validationErrors['address']"
+            class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+            [class.border-red-500]="validationErrors['address']"
+            [class.border-slate-700]="!validationErrors['address']"
           />
+
+          @if (validationErrors['address']) {
+            <p class="mt-1 text-xs text-red-400" role="alert">
+              {{ validationErrors['address'] }}
+            </p>
+          }
         </div>
 
         <!-- Plan + status -->
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
-            <label
-              for="plan"
-              class="mb-2 block text-sm font-medium text-slate-300"
-            >
-              Plan
+            <label for="plan" class="mb-2 block text-sm font-medium text-slate-300">
+              Plan *
             </label>
 
             <select
               id="plan"
               name="plan"
               [(ngModel)]="newClient.plan"
-              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+              (ngModelChange)="clearValidationError('plan')"
+              [attr.aria-invalid]="!!validationErrors['plan']"
+              class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+              [class.border-red-500]="validationErrors['plan']"
+              [class.border-slate-700]="!validationErrors['plan']"
             >
               <option value="FTTH 300 Mbps">FTTH 300 Mbps</option>
               <option value="FTTH 600 Mbps">FTTH 600 Mbps</option>
               <option value="FTTH 1 Gb">FTTH 1 Gb</option>
               <option value="FTTH 2 Gb">FTTH 2 Gb</option>
             </select>
+
+            @if (validationErrors['plan']) {
+              <p class="mt-1 text-xs text-red-400" role="alert">
+                {{ validationErrors['plan'] }}
+              </p>
+            }
           </div>
 
           <div>
-            <label
-              for="status"
-              class="mb-2 block text-sm font-medium text-slate-300"
-            >
-              Estado
+            <label for="status" class="mb-2 block text-sm font-medium text-slate-300">
+              Estado *
             </label>
 
             <select
               id="status"
               name="status"
               [(ngModel)]="newClient.status"
-              class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+              (ngModelChange)="clearValidationError('status')"
+              [attr.aria-invalid]="!!validationErrors['status']"
+              class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+              [class.border-red-500]="validationErrors['status']"
+              [class.border-slate-700]="!validationErrors['status']"
             >
               <option value="Pendiente">Pendiente</option>
               <option value="Activo">Activo</option>
               <option value="Suspendido">Suspendido</option>
             </select>
+
+            @if (validationErrors['status']) {
+              <p class="mt-1 text-xs text-red-400" role="alert">
+                {{ validationErrors['status'] }}
+              </p>
+            }
           </div>
         </div>
 
@@ -400,8 +372,23 @@
             name="installationDate"
             type="date"
             [(ngModel)]="newClient.installationDate"
-            class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+            (ngModelChange)="clearValidationError('installationDate')"
+            [max]="getTodayDate()"
+            [attr.aria-invalid]="!!validationErrors['installationDate']"
+            class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+            [class.border-red-500]="validationErrors['installationDate']"
+            [class.border-slate-700]="!validationErrors['installationDate']"
           />
+
+          @if (validationErrors['installationDate']) {
+            <p class="mt-1 text-xs text-red-400" role="alert">
+              {{ validationErrors['installationDate'] }}
+            </p>
+          } @else {
+            <p class="mt-1 text-xs text-slate-500">
+              Campo opcional. La fecha no puede ser posterior a hoy.
+            </p>
+          }
         </div>
 
         <!-- Buttons -->
@@ -421,7 +408,6 @@
             {{ editingClientId === null ? 'Crear cliente' : 'Guardar cambios' }}
           </button>
         </div>
-
       </form>
     </div>
   </div>

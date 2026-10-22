@@ -24,6 +24,16 @@ export class Profile implements OnInit {
   successMessage = '';
   isSaving = false;
 
+  passwordForm = {
+  currentPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+};
+
+    isChangingPassword = false;
+    passwordError = '';
+    passwordSuccess = '';
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -121,6 +131,76 @@ export class Profile implements OnInit {
       this.isSaving = false;
     }
   }
+
+  
+    changeMyPassword(): void {
+    this.passwordError = '';
+    this.passwordSuccess = '';
+
+    if (!this.currentUser) {
+        this.passwordError = 'No se ha encontrado tu cuenta.';
+        return;
+    }
+
+    const { currentPassword, newPassword, confirmPassword } =
+        this.passwordForm;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        this.passwordError = 'Completa los tres campos de contraseña.';
+        return;
+    }
+
+    if (!this.userService.verifyPassword(
+        this.currentUser.id,
+        currentPassword,
+    )) {
+        this.passwordError = 'La contraseña actual no es correcta.';
+        return;
+    }
+
+    if (newPassword.length < 8) {
+        this.passwordError =
+        'La nueva contraseña debe tener al menos 8 caracteres.';
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        this.passwordError = 'Las nuevas contraseñas no coinciden.';
+        return;
+    }
+
+    if (newPassword === currentPassword) {
+        this.passwordError =
+        'La nueva contraseña debe ser diferente de la actual.';
+        return;
+    }
+
+    this.isChangingPassword = true;
+
+    try {
+        const changed = this.userService.changePassword(
+        this.currentUser.id,
+        newPassword,
+        );
+
+        if (!changed) {
+        this.passwordError = 'No se pudo cambiar la contraseña.';
+        return;
+        }
+
+        this.passwordForm = {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+        };
+
+        this.passwordSuccess = 'Tu contraseña se ha cambiado correctamente.';
+    } finally {
+        this.isChangingPassword = false;
+    }
+    }
+
+
 
   cancelChanges(): void {
     this.errorMessage = '';

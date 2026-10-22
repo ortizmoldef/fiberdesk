@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { Incident } from '../../shared/models/incident.model';
 
@@ -5,12 +6,16 @@ import { Incident } from '../../shared/models/incident.model';
   providedIn: 'root',
 })
 export class IncidentService {
+  private readonly storageKey = 'fiberdesk_incidents';
 
-  private incidents: Incident[] = [
+  private incidents: Incident[] = [];
+
+  private readonly initialIncidents: Incident[] = [
     {
       id: 1,
       title: 'Sin conexión a Internet',
-      description: 'El cliente indica que no tiene conexión desde esta mañana.',
+      description:
+        'El cliente indica que no tiene conexión desde esta mañana.',
       clientName: 'Juan García',
       technician: 'Carlos Sánchez',
       priority: 'Alta',
@@ -49,29 +54,101 @@ export class IncidentService {
     },
   ];
 
-  getIncidents(): Incident[] {
-    return this.incidents;
+  constructor() {
+    this.loadFromStorage();
   }
 
-  addIncident(incident: Incident): void {
-    this.incidents.unshift(incident);
+  /**
+   * Recupera las incidencias guardadas.
+   * Si es la primera ejecución, carga los datos iniciales.
+   */
+  private loadFromStorage(): void {
+    if (typeof localStorage === 'undefined') {
+      this.incidents = this.initialIncidents.map(incident => ({
+        ...incident,
+      }));
+      return;
+    }
+
+    try {
+      const stored = localStorage.getItem(this.storageKey);
+
+      if (stored === null) {
+        this.incidents = this.initialIncidents.map(incident => ({
+          ...incident,
+        }));
+
+        this.persist();
+        return;
+      }
+
+      const parsed: unknown = JSON.parse(stored);
+
+      if (
+        Array.isArray(parsed) &&
+        parsed.every(
+          incident =>
+            incident !== null &&
+            typeof incident === 'object' &&
+            Number.isInteger(incident.id),
+        )
+      ) {
+        this.incidents = parsed as Incident[];
+      } else {
+        this.incidents = this.initialIncidents.map(incident => ({
+          ...incident,
+        }));
+        this.persist();
+      }
+    } catch {
+      this.incidents = this.initialIncidents.map(incident => ({
+        ...incident,
+      }));
+      this.persist();
+    }
   }
 
+  /**
+   * Guarda el estado actual de las incidencias.
+   */
+  private persist(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
 
-  updateIncident(updatedIncident: Incident): void {
-  const index = this.incidents.findIndex(
-    incident => incident.id === updatedIncident.id
-  );
-
-  if (index !== -1) {
-    this.incidents[index] = updatedIncident;
-  }
-}
-
-  deleteIncident(id: number): void {
-    this.incidents = this.incidents.filter(
-      incident => incident.id !== id
+    localStorage.setItem(
+      this.storageKey,
+      JSON.stringify(this.incidents),
     );
   }
 
+  getIncidents(): Incident[] {
+    return [...this.incidents];
+  }
+
+  addIncident(incident: Incident): void {
+    this.incidents.unshift({ ...incident });
+    this.persist();
+  }
+
+  updateIncident(updatedIncident: Incident): void {
+    const index = this.incidents.findIndex(
+      incident => incident.id === updatedIncident.id,
+    );
+
+    if (index === -1) {
+      return;
+    }
+
+    this.incidents[index] = { ...updatedIncident };
+    this.persist();
+  }
+
+  deleteIncident(id: number): void {
+    this.incidents = this.incidents.filter(
+      incident => incident.id !== id,
+    );
+
+    this.persist();
+  }
 }

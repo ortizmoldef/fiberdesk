@@ -18,6 +18,14 @@ export class Incidents {
 
   showForm = false;
   editingIncidentId: number | null = null;
+  submitted = false;
+
+  validationErrors: Record<string, string> = {};
+
+  private readonly maxTitleLength = 100;
+  private readonly maxDescriptionLength = 1000;
+  private readonly maxClientNameLength = 100;
+  private readonly maxTechnicianLength = 100;
 
   newIncident: Omit<Incident, 'id'> = this.createEmptyIncident();
 
@@ -47,6 +55,7 @@ export class Incidents {
 
     this.editingIncidentId = null;
     this.newIncident = this.createEmptyIncident();
+    this.resetValidation();
     this.showForm = true;
   }
 
@@ -67,6 +76,7 @@ export class Incidents {
       createdAt: incident.createdAt,
     };
 
+    this.resetValidation();
     this.showForm = true;
   }
 
@@ -91,13 +101,143 @@ export class Incidents {
     this.showForm = false;
     this.editingIncidentId = null;
     this.newIncident = this.createEmptyIncident();
+    this.resetValidation();
+  }
+
+  private resetValidation(): void {
+    this.submitted = false;
+    this.validationErrors = {};
+  }
+
+  clearValidationError(field: string): void {
+    delete this.validationErrors[field];
+  }
+
+  /**
+   * Devuelve la fecha actual en formato YYYY-MM-DD.
+   * Es público porque se utiliza desde la plantilla HTML.
+   */
+  getTodayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Comprueba que la fecha existe realmente
+   * y tiene el formato YYYY-MM-DD.
+   */
+
+    private isValidDate(date: string): boolean {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return false;
+      }
+
+      const [year, month, day] = date.split('-').map(Number);
+
+      const parsedDate = new Date(year, month - 1, day);
+
+      return (
+        parsedDate.getFullYear() === year &&
+        parsedDate.getMonth() === month - 1 &&
+        parsedDate.getDate() === day
+      );
+    }
+
+
+  private validateIncident(): boolean {
+    const errors: Record<string, string> = {};
+
+    const title = this.newIncident.title.trim();
+    const description = this.newIncident.description.trim();
+    const clientName = this.newIncident.clientName.trim();
+    const technician = this.newIncident.technician.trim();
+
+    // El técnico solo modifica la descripción y el estado al editar.
+    if (!this.isTechnician || this.editingIncidentId === null) {
+      // Validación del título.
+      if (!title) {
+        errors['title'] = 'El título es obligatorio.';
+      } else if (title.length < 5) {
+        errors['title'] = 'Escribe al menos 5 caracteres.';
+      } else if (title.length > this.maxTitleLength) {
+        errors['title'] =
+          `El título no puede superar ${this.maxTitleLength} caracteres.`;
+      }
+
+      // Validación del cliente.
+      if (!clientName) {
+        errors['clientName'] = 'El cliente es obligatorio.';
+      } else if (clientName.length < 3) {
+        errors['clientName'] = 'Escribe al menos 3 caracteres.';
+      } else if (clientName.length > this.maxClientNameLength) {
+        errors['clientName'] =
+          `El nombre no puede superar ${this.maxClientNameLength} caracteres.`;
+      } else if (!/^[\p{L}\p{M}\d\s.'’()-]+$/u.test(clientName)) {
+        errors['clientName'] =
+          'Usa letras, números y signos de puntuación habituales.';
+      }
+
+      // Validación del técnico asignado.
+      if (technician.length > this.maxTechnicianLength) {
+        errors['technician'] =
+          `El nombre no puede superar ${this.maxTechnicianLength} caracteres.`;
+      } else if (
+        technician &&
+        !/^[\p{L}\p{M}\d\s.'’()-]+$/u.test(technician)
+      ) {
+        errors['technician'] =
+          'Usa letras, números y signos de puntuación habituales.';
+      }
+
+      // Validación de la prioridad.
+      if (
+        !['Crítica', 'Alta', 'Media', 'Baja'].includes(
+          this.newIncident.priority,
+        )
+      ) {
+        errors['priority'] = 'Selecciona una prioridad válida.';
+      }
+    }
+
+    // Validación de la descripción.
+    if (description.length > this.maxDescriptionLength) {
+      errors['description'] =
+        `La descripción no puede superar ${this.maxDescriptionLength} caracteres.`;
+    }
+
+    // Validación del estado.
+    if (
+      !['Abierta', 'En curso', 'Resuelta', 'Cerrada'].includes(
+        this.newIncident.status,
+      )
+    ) {
+      errors['status'] = 'Selecciona un estado válido.';
+    }
+
+    // Validación de la fecha.
+    const date = String(this.newIncident.createdAt ?? '').trim();
+
+    if (!date) {
+      errors['createdAt'] = 'La fecha es obligatoria.';
+    } else if (!this.isValidDate(date)) {
+      errors['createdAt'] = 'Introduce una fecha válida.';
+    } else if (date > this.getTodayDate()) {
+      errors['createdAt'] = 'La fecha no puede ser futura.';
+    }
+
+    this.validationErrors = errors;
+
+    return Object.keys(errors).length === 0;
   }
 
   saveIncident(): void {
-    if (
-      !this.newIncident.title.trim() ||
-      !this.newIncident.clientName.trim()
-    ) {
+    this.submitted = true;
+
+    if (!this.validateIncident()) {
       return;
     }
 
@@ -121,13 +261,17 @@ export class Incidents {
         // El técnico solo puede modificar descripción y estado.
         updatedIncident = {
           ...originalIncident,
-          description: this.newIncident.description,
+          description: this.newIncident.description.trim(),
           status: this.newIncident.status,
         };
       } else {
         updatedIncident = {
-          id: this.editingIncidentId,
           ...this.newIncident,
+          id: this.editingIncidentId,
+          title: this.newIncident.title.trim(),
+          description: this.newIncident.description.trim(),
+          clientName: this.newIncident.clientName.trim(),
+          technician: this.newIncident.technician.trim(),
         };
       }
 
@@ -139,10 +283,13 @@ export class Incidents {
       }
 
       const newIncident: Incident = {
-        id: this.incidents.length > 0
-          ? Math.max(...this.incidents.map(incident => incident.id)) + 1
-          : 1,
         ...this.newIncident,
+        id: Date.now(),
+        title: this.newIncident.title.trim(),
+        description: this.newIncident.description.trim(),
+        clientName: this.newIncident.clientName.trim(),
+        technician: this.newIncident.technician.trim(),
+        createdAt: this.newIncident.createdAt,
       };
 
       this.incidentService.addIncident(newIncident);
@@ -160,7 +307,7 @@ export class Incidents {
       technician: '',
       priority: 'Media',
       status: 'Abierta',
-      createdAt: '',
+      createdAt: this.getTodayDate(),
     };
   }
 }

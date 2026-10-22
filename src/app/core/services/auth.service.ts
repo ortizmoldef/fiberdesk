@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -21,70 +22,98 @@ export class AuthService {
   ) {}
 
   /**
-   * Inicio de sesión provisional para desarrollo.
+   * Inicia sesión con las credenciales del usuario.
+   * Autenticación provisional para desarrollo.
    */
   login(email: string, password: string): boolean {
-    const user = this.userService.authenticate(email, password);
-
-    if (!user || typeof localStorage === 'undefined') {
+    if (
+      typeof localStorage === 'undefined' ||
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      !email.trim() ||
+      !password
+    ) {
       return false;
     }
 
-    localStorage.setItem(this.tokenKey, 'development-token');
-    localStorage.setItem(this.userKey, JSON.stringify(user));
+    // Eliminamos cualquier sesión anterior antes de validar.
+    this.clearSession();
 
-    return true;
+    const user = this.userService.authenticate(email, password);
+
+    if (!user || !this.isValidUser(user)) {
+      return false;
+    }
+
+    try {
+      localStorage.setItem(this.tokenKey, 'development-token');
+      localStorage.setItem(this.userKey, JSON.stringify(user));
+
+      return true;
+    } catch {
+      // Si el almacenamiento falla, no dejamos una sesión parcial.
+      this.clearSession();
+      return false;
+    }
   }
 
   /**
-   * Devuelve el token provisional.
+   * Devuelve el token provisional de la sesión.
    */
   getToken(): string | null {
     if (typeof localStorage === 'undefined') {
       return null;
     }
 
-    return localStorage.getItem(this.tokenKey);
+    const token = localStorage.getItem(this.tokenKey);
+
+    return token === 'development-token' ? token : null;
   }
 
   /**
-   * Devuelve los datos actuales del usuario.
-   * Sincroniza nombre, correo y rol con UserService.
+   * Devuelve el usuario actual y sincroniza sus datos.
    */
   getCurrentUser(): User | null {
-    if (
-      typeof localStorage === 'undefined' ||
-      !this.getToken()
-    ) {
+    if (typeof localStorage === 'undefined') {
       return null;
     }
 
+    const token = this.getToken();
     const storedUser = localStorage.getItem(this.userKey);
 
-    if (!storedUser) {
+    // El token y los datos de usuario deben existir juntos.
+    if (!token || !storedUser) {
+      this.clearSession();
       return null;
     }
 
     try {
-      const sessionUser = JSON.parse(storedUser) as User;
+      const sessionUser: unknown = JSON.parse(storedUser);
 
-      if (typeof sessionUser.id !== 'number') {
+      if (!this.isValidUser(sessionUser)) {
         this.clearSession();
         return null;
       }
 
-      const currentUser = this.userService.getUserById(sessionUser.id);
+      const currentUser = this.userService.getUserById(
+        sessionUser.id,
+      );
 
-      // Si el usuario ya no existe o está desactivado,
-      // se invalida su sesión.
+      // La cuenta debe seguir existiendo y estar activa.
       if (!currentUser || !currentUser.active) {
-        this.logout();
+        this.clearSession();
         return null;
       }
 
-      // Actualiza los datos guardados si han cambiado.
-      if (JSON.stringify(sessionUser) !== JSON.stringify(currentUser)) {
-        localStorage.setItem(this.userKey, JSON.stringify(currentUser));
+      // Los datos actuales de UserService son la referencia.
+      if (
+        JSON.stringify(sessionUser) !==
+        JSON.stringify(currentUser)
+      ) {
+        localStorage.setItem(
+          this.userKey,
+          JSON.stringify(currentUser),
+        );
       }
 
       return currentUser;
@@ -95,14 +124,14 @@ export class AuthService {
   }
 
   /**
-   * Comprueba si existe una sesión válida.
+   * Comprueba si existe una sesión local válida.
    */
   isAuthenticated(): boolean {
-    return !!this.getToken() && !!this.getCurrentUser();
+    return this.getCurrentUser() !== null;
   }
 
   /**
-   * Comprueba si el usuario tiene un rol determinado.
+   * Comprueba el rol del usuario actual.
    */
   hasRole(role: UserRole): boolean {
     return this.getCurrentUser()?.role === role;
@@ -118,11 +147,45 @@ export class AuthService {
       return false;
     }
 
-    return ROLE_PERMISSIONS[user.role]?.includes(permission) ?? false;
+    return (
+      ROLE_PERMISSIONS[user.role]?.includes(permission) ?? false
+    );
   }
 
   /**
-   * Elimina los datos de sesión sin navegar.
+   * Valida la estructura básica de un usuario.
+   */
+  private isValidUser(value: unknown): value is User {
+    if (
+      typeof value !== 'object' ||
+      value === null
+    ) {
+      return false;
+    }
+
+    const user = value as Partial<User>;
+
+    const validRoles: UserRole[] = [
+      'admin',
+      'technician',
+      'supervisor',
+    ];
+
+    return (
+      Number.isInteger(user.id) &&
+      Number(user.id) > 0 &&
+      typeof user.name === 'string' &&
+      user.name.trim().length > 0 &&
+      typeof user.email === 'string' &&
+      user.email.trim().length > 0 &&
+      validRoles.includes(user.role as UserRole) &&
+      typeof user.active === 'boolean' &&
+      typeof user.createdAt === 'string'
+    );
+  }
+
+  /**
+   * Elimina los datos locales de la sesión.
    */
   private clearSession(): void {
     if (typeof localStorage === 'undefined') {
@@ -134,10 +197,10 @@ export class AuthService {
   }
 
   /**
-   * Cierra la sesión y vuelve al login.
+   * Cierra la sesión y vuelve a la pantalla de acceso.
    */
   logout(): void {
     this.clearSession();
-    this.router.navigate(['/login']);
+    void this.router.navigate(['/login']);
   }
 }
