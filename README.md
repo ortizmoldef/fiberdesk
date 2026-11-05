@@ -1,58 +1,188 @@
-# Fiberdesk
+# ◈ FiberDesk
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+### Network Management System
 
-## Development server
+**FiberDesk** es una aplicación web de gestión administrativa diseñada para empresas de telecomunicaciones y proveedores de servicios de fibra óptica.
 
-To start a local development server, run:
+Su objetivo es centralizar y simplificar la gestión de clientes, instalaciones, técnicos e incidencias desde una interfaz moderna, intuitiva y adaptable.
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Angular-Standalone-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular">
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+</p>
+
+---
+
+## ✨ Características principales
+
+- **Dashboard:** panel principal con indicadores y resumen general de la actividad.
+- **Gestión de clientes:** administración de información, planes y estados de clientes.
+- **Gestión de instalaciones:** seguimiento de instalaciones y sus estados.
+- **Gestión de técnicos:** administración de técnicos, especialidades y disponibilidad.
+- **Gestión de incidencias:** creación, seguimiento, edición y resolución de incidencias.
+- **Gestión de usuarios:** administración de cuentas y asignación de roles.
+- **Sistema de permisos:** control de funcionalidades según el rol del usuario.
+- **Perfil personal:** consulta y modificación de información personal y contraseña.
+- **Configuración:** preferencias operativas, apariencia, registro de actividad e información del sistema.
+- **Modo claro y oscuro:** interfaz adaptable con preferencia de tema guardada.
+- **Diseño responsive:** interfaz adaptada a diferentes tamaños de pantalla.
+
+## 🖥️ Capturas de pantalla
+
+<!-- Añade aquí tus capturas de pantalla -->
+<!-- Puedes guardarlas en una carpeta /screenshots -->
+
+| Dashboard | Gestión de clientes |
+|:---:|:---:|
+| ![Dashboard](screenshots/dashboard.png) | ![Clientes](screenshots/clientes.png) |
+
+| Modo oscuro | Modo claro |
+|:---:|:---:|
+| ![Modo oscuro](screenshots/modo-oscuro.png) | ![Modo claro](screenshots/modo-claro.png) |
+
+## 🔐 Roles y permisos
+
+FiberDesk incorpora un sistema de control de acceso basado en tres roles:
+
+| Rol | Descripción |
+|---|---|
+| Administrador | Acceso completo a la aplicación y gestión de usuarios. |
+| Supervisor | Supervisión y gestión de las operaciones. |
+| Técnico | Acceso a las funcionalidades relacionadas con su trabajo. |
+
+Los permisos determinan qué apartados y acciones están disponibles para cada usuario.
+
+## 🛠️ Tecnologías utilizadas
+
+| Tecnología | Uso |
+|---|---|
+| Angular | Framework principal |
+| TypeScript | Lenguaje de programación |
+| Tailwind CSS | Diseño y estilos |
+| HTML5 | Estructura de la aplicación |
+| CSS3 | Estilos y personalización |
+| LocalStorage | Almacenamiento local de preferencias y datos de desarrollo |
+| Git y GitHub | Control de versiones |
+
+## 📁 Estructura del proyecto
+
+```text
+src/
+└── app/
+    ├── core/
+    │   ├── guards/
+    │   ├── interceptors/
+    │   └── services/
+    │
+    ├── shared/
+    │   ├── components/
+    │   └── models/
+    │
+    ├── features/
+    │   ├── dashboard/
+    │   ├── clients/
+    │   ├── installations/
+    │   ├── technicians/
+    │   ├── incidents/
+    │   ├── users/
+    │   ├── profile/
+    │   ├── configuration/
+    │   └── login/
+    │
+    └── routes/
+        └── app.routes.ts
+```
+
+La aplicación utiliza una arquitectura modular basada en componentes standalone de Angular, separando funcionalidades, servicios, modelos y componentes compartidos.
+
+## 🚀 Instalación y ejecución
+
+### Requisitos previos
+
+- Node.js
+- npm
+- Angular CLI
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/ortizmoldef/fiberdesk.git
+```
+
+### 2. Acceder al proyecto
+
+```bash
+cd fiberdesk
+```
+
+### 3. Instalar dependencias
+
+```bash
+npm install
+```
+
+### 4. Iniciar el servidor de desarrollo
+
+```bash
+npm start
+```
+
+También puedes utilizar:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 5. Abrir la aplicación
 
-## Code scaffolding
+Accede desde el navegador a:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```text
+http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🎨 Diseño e interfaz
 
-```bash
-ng generate --help
-```
+FiberDesk apuesta por una interfaz moderna basada en:
 
-## Building
+- Diseño oscuro con tonalidades Slate.
+- Acentos en color Cyan.
+- Alternancia entre tema claro y oscuro.
+- Tarjetas con bordes suaves y esquinas redondeadas.
+- Tablas y formularios organizados.
+- Navegación lateral para acceder rápidamente a los módulos.
 
-To build the project run:
+## 🗺️ Próximas mejoras
 
-```bash
-ng build
-```
+El proyecto continúa en desarrollo. Entre los objetivos previstos se encuentran:
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- [ ] Implementar backend y API REST.
+- [ ] Integrar una base de datos.
+- [ ] Implementar autenticación real y segura.
+- [ ] Conectar los módulos con datos persistentes.
+- [ ] Completar el registro de actividad.
+- [ ] Aplicar las preferencias operativas a todas las tablas.
+- [ ] Incorporar pruebas automatizadas.
+- [ ] Mejorar la monitorización del sistema.
 
-## Running unit tests
+## 👨‍💻 Autor
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+**Fernando Ortiz Molde**
 
-```bash
-ng test
-```
+Desarrollador web interesado en la creación de aplicaciones, el desarrollo de software y las nuevas tecnologías.
 
-## Running end-to-end tests
+- GitHub: [@ortizmoldef](https://github.com/ortizmoldef)
+- LinkedIn: [Fernando Ortiz Molde](https://www.linkedin.com/in/fernando-ortiz-molde-25b9b7177/)
+- Email: [ortizmoldef@gmail.com](mailto:ortizmoldef@gmail.com)
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+<p align="center">
+  Desarrollado con dedicación por <strong>Fernando Ortiz Molde</strong>.
+  <br>
+  ◈ FiberDesk · Network Management
+</p>
 
 ## Additional Resources
 
