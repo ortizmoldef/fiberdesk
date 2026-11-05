@@ -35,7 +35,8 @@ Su objetivo es centralizar y simplificar la gestión de clientes, instalaciones,
 
 | Dashboard | Gestión de clientes |
 |:---:|:---:|
-| ![Dashboard](screenshots/dashboard.png) | ![Clientes](screenshots/clientes.png) |
+| ![Dashboard](<img width="1907" height="1085" alt="image" src="https://github.com/user-attachments/assets/0d2c0a4a-4e5c-4c04-bf5b-df8c80902e12" />
+) | ![Clientes](screenshots/clientes.png) |
 
 | Modo oscuro | Modo claro |
 |:---:|:---:|
