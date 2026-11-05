@@ -40,7 +40,7 @@ Su objetivo es centralizar y simplificar la gestión de clientes, instalaciones,
       <img src="https://github.com/user-attachments/assets/0d2c0a4a-4e5c-4c04-bf5b-df8c80902e12" width="100%" alt="Dashboard">
     </td>
     <td width="50%">
-      <img width="1916" height="1073" alt="image" src="https://github.com/user-attachments/assets/f877979c-0620-4449-88f2-3ad735bcd537" />
+      <img src="https://github.com/user-attachments/assets/f877979c-0620-4449-88f2-3ad735bcd537" width="100%" alt="Clientes"/>
     </td>
   </tr>
   <tr>
@@ -49,10 +49,10 @@ Su objetivo es centralizar y simplificar la gestión de clientes, instalaciones,
   </tr>
   <tr>
     <td width="50%">
-      <img src="screenshots/modo-oscuro.png" width="100%" alt="Modo oscuro">
+      <img src="https://github.com/user-attachments/assets/cada636a-9eef-4aa9-a3aa-1b5a177b48ea" width="100%" alt="Modo Oscuro"/>
     </td>
     <td width="50%">
-      <img src="screenshots/modo-claro.png" width="100%" alt="Modo claro">
+      <img src="https://github.com/user-attachments/assets/9b40701c-11a7-4cf3-9269-2f6670ccd2be" width="100%" alt="Modo Claro"/>
     </td>
   </tr>
 </table>
