@@ -1,15 +1,16 @@
-<aside class="fixed inset-y-0 left-0 hidden h-screen w-64 flex-col border-r border-slate-800 bg-slate-950 lg:flex">
+
+<aside class="fixed inset-y-0 left-0 hidden h-screen w-64 flex-col border-r border-slate-200 bg-white lg:flex dark:border-slate-800 dark:bg-slate-950">
 
   <!-- Logo -->
-  <div class="flex h-20 shrink-0 items-center border-b border-slate-800 px-6">
+  <div class="flex h-20 shrink-0 items-center border-b border-slate-200 px-6 dark:border-slate-800">
     <div class="flex items-center gap-3">
 
-      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
         <span class="text-xl">◈</span>
       </div>
 
       <div>
-        <h1 class="text-lg font-bold text-white">
+        <h1 class="text-lg font-bold text-slate-900 dark:text-white">
           FiberDesk
         </h1>
 
@@ -31,8 +32,8 @@
     <!-- Dashboard -->
     <a
       routerLink="/dashboard"
-      routerLinkActive="bg-cyan-500/10 text-cyan-400"
-      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      routerLinkActive="bg-cyan-50 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400"
+      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
     >
       <span class="text-lg">▦</span>
       Dashboard
@@ -42,8 +43,8 @@
     @if (can('clients.view')) {
       <a
         routerLink="/clientes"
-        routerLinkActive="bg-cyan-500/10 text-cyan-400"
-        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+        routerLinkActive="bg-cyan-50 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400"
+        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
       >
         <span class="text-lg">♙</span>
         Clientes
@@ -53,8 +54,8 @@
     <!-- Instalaciones -->
     <a
       routerLink="/instalaciones"
-      routerLinkActive="bg-cyan-500/10 text-cyan-400"
-      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      routerLinkActive="bg-cyan-50 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400"
+      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
     >
       <span class="text-lg">⌁</span>
       Instalaciones
@@ -64,8 +65,8 @@
     @if (can('technicians.view')) {
       <a
         routerLink="/tecnicos"
-        routerLinkActive="bg-cyan-500/10 text-cyan-400"
-        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+        routerLinkActive="bg-cyan-50 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400"
+        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
       >
         <span class="text-lg">⚒</span>
         Técnicos
@@ -75,20 +76,19 @@
     <!-- Incidencias -->
     <a
       routerLink="/incidencias"
-      routerLinkActive="bg-cyan-500/10 text-cyan-400"
-      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+      routerLinkActive="bg-cyan-50 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400"
+      class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
     >
       <span class="text-lg">!</span>
       Incidencias
     </a>
 
-    
     <!-- Usuarios -->
     @if (can('users.view')) {
       <a
         routerLink="/usuarios"
-        routerLinkActive="bg-cyan-500/10 text-cyan-400"
-        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
+        routerLinkActive="bg-cyan-50 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400"
+        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
       >
         <span class="text-lg">♙</span>
         Usuarios
@@ -97,58 +97,55 @@
 
   </nav>
 
+  <!-- Accesos rápidos -->
+  @if (can('installations.create') || can('incidents.view')) {
+    <div class="mx-4 mt-5 border-t border-slate-200 px-1 pt-5 dark:border-slate-800">
 
+      <p class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+        Acceso rápido
+      </p>
 
-<!-- Accesos rápidos -->
-@if (can('installations.create') || can('incidents.view')) {
-  <div class="mx-4 mt-5 border-t border-slate-800 px-1 pt-5">
+      @if (can('installations.create')) {
+        <a
+          routerLink="/instalaciones"
+          class="group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+        >
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-lg text-cyan-600 transition group-hover:bg-cyan-500/10 dark:bg-slate-800 dark:text-cyan-400">
+            +
+          </span>
+          <span>Nueva instalación</span>
+        </a>
+      }
 
-    <p class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
-      Acceso rápido
-    </p>
+      @if (can('incidents.view')) {
+        <a
+          routerLink="/incidencias"
+          class="group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+        >
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-lg text-amber-600 transition group-hover:bg-amber-500/10 dark:bg-slate-800 dark:text-amber-400">
+            !
+          </span>
+          <span>Ver incidencias</span>
+        </a>
+      }
 
-    @if (can('installations.create')) {
-      <a
-        routerLink="/instalaciones"
-        class="group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
-      >
-        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-lg text-cyan-400 transition group-hover:bg-cyan-500/10">
-          +
-        </span>
-        <span>Nueva instalación</span>
-      </a>
-    }
+    </div>
+  }
 
-    @if (can('incidents.view')) {
-      <a
-        routerLink="/incidencias"
-        class="group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white"
-      >
-        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-lg text-amber-400 transition group-hover:bg-amber-500/10">
-          !
-        </span>
-        <span>Ver incidencias</span>
-      </a>
-    }
+  <!-- Estado del sistema -->
+  <div class="mt-auto border-t border-slate-200 px-4 pb-3 pt-4 dark:border-slate-800">
 
-  </div>
-}
-
-
-  <!-- Estado del sistema: abajo del todo -->
-  <div class="mt-auto border-t border-slate-800 px-4 pb-3 pt-4">
-
-    <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
 
       <!-- Cabecera -->
       <div class="mb-4 flex items-center gap-2">
 
-        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
           <span class="text-lg">⌁</span>
         </div>
 
         <div>
-          <p class="text-sm font-semibold text-white">
+          <p class="text-sm font-semibold text-slate-900 dark:text-white">
             Estado del sistema
           </p>
 
@@ -163,22 +160,22 @@
       <div class="space-y-3">
 
         <div class="flex items-center justify-between">
-          <span class="text-xs text-slate-400">
+          <span class="text-xs text-slate-600 dark:text-slate-400">
             Sistema
           </span>
 
-          <span class="inline-flex items-center gap-2 text-xs font-medium text-emerald-400">
+          <span class="inline-flex items-center gap-2 text-xs font-medium text-emerald-600 dark:text-emerald-400">
             <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
             Operativo
           </span>
         </div>
 
         <div class="flex items-center justify-between">
-          <span class="text-xs text-slate-400">
+          <span class="text-xs text-slate-600 dark:text-slate-400">
             Conexión
           </span>
 
-          <span class="inline-flex items-center gap-2 text-xs font-medium text-cyan-400">
+          <span class="inline-flex items-center gap-2 text-xs font-medium text-cyan-700 dark:text-cyan-400">
             <span class="h-2 w-2 rounded-full bg-cyan-400"></span>
             Activa
           </span>
@@ -187,8 +184,8 @@
       </div>
 
       <!-- Versión -->
-      <div class="mt-4 border-t border-slate-800 pt-3">
-        <p class="text-center text-[10px] tracking-wider text-slate-600">
+      <div class="mt-4 border-t border-slate-200 pt-3 dark:border-slate-800">
+        <p class="text-center text-[10px] tracking-wider text-slate-500 dark:text-slate-600">
           FIBERDESK · V1.0.0
         </p>
       </div>

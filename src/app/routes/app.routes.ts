@@ -12,6 +12,7 @@ import { Installations } from '../features/installations/installations';
 import { Technicians } from '../features/technicians/technicians';
 import { Incidents } from '../features/incidents/incidents';
 
+
 export const routes: Routes = [
   {
     path: 'login',
@@ -65,6 +66,15 @@ export const routes: Routes = [
         loadComponent: () =>
           import('../features/profile/profile').then(m => m.Profile),
       },
+
+      {
+      path: 'configuracion',
+      loadComponent: () =>
+        import('../features/configuration/configuration').then(
+          (m) => m.Configuration
+        ),
+      data: { permission: 'settings.view' },
+    },
     ],
   },
   {

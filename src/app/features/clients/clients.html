@@ -4,8 +4,8 @@
   <!-- Header -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-white">Clientes</h1>
-      <p class="mt-1 text-sm text-slate-400">
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Clientes</h1>
+      <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
         Gestiona los clientes de FiberDesk.
       </p>
     </div>
@@ -14,7 +14,7 @@
       <button
         type="button"
         (click)="openForm()"
-        class="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20"
+        class="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-700 transition hover:bg-cyan-500/20 dark:text-cyan-400"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -26,72 +26,72 @@
   </div>
 
   <!-- Search -->
-  <div class="rounded-xl border border-slate-800 bg-slate-900 p-4">
+  <div class="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
     <input
       type="text"
       [(ngModel)]="searchTerm"
       placeholder="Buscar por nombre, email o teléfono..."
-      class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+      class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-cyan-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-600"
     />
   </div>
 
   <!-- Clients table -->
-  <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
+  <div class="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
     <div class="overflow-x-auto">
       <table class="w-full text-left text-sm">
-        <thead class="border-b border-slate-800 bg-slate-950">
+        <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
           <tr>
-            <th class="px-6 py-4 text-center font-medium text-slate-400">Cliente</th>
-            <th class="px-6 py-4 text-center font-medium text-slate-400">Contacto</th>
-            <th class="px-6 py-4 text-center font-medium text-slate-400">Dirección</th>
-            <th class="px-6 py-4 text-center font-medium text-slate-400">Plan</th>
-            <th class="px-6 py-4 text-center font-medium text-slate-400">Estado</th>
-            <th class="px-6 py-4 text-center font-medium text-slate-400">Instalación</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-600 dark:text-slate-400">Cliente</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-600 dark:text-slate-400">Contacto</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-600 dark:text-slate-400">Dirección</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-600 dark:text-slate-400">Plan</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-600 dark:text-slate-400">Estado</th>
+            <th class="px-6 py-4 text-center font-medium text-slate-600 dark:text-slate-400">Instalación</th>
 
             @if (can('clients.edit') || can('clients.delete')) {
-              <th class="px-6 py-4 text-center font-medium text-slate-400">Acciones</th>
+              <th class="px-6 py-4 text-center font-medium text-slate-600 dark:text-slate-400">Acciones</th>
             }
           </tr>
         </thead>
 
-        <tbody class="divide-y divide-slate-800">
+        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
           @for (client of filteredClients; track client.id) {
-            <tr class="transition hover:bg-slate-800/50">
+            <tr class="transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
               <td class="px-6 py-4 text-center">
-                <div class="font-medium text-white">{{ client.name }}</div>
+                <div class="font-medium text-slate-900 dark:text-white">{{ client.name }}</div>
                 <div class="mt-1 text-xs text-slate-500">ID #{{ client.id }}</div>
               </td>
 
               <td class="px-6 py-4 text-center">
-                <div class="text-slate-300">{{ client.email }}</div>
+                <div class="text-slate-700 dark:text-slate-300">{{ client.email }}</div>
                 <div class="mt-1 text-xs text-slate-500">{{ client.phone }}</div>
               </td>
 
-              <td class="px-6 py-4 text-center text-slate-400">
+              <td class="px-6 py-4 text-center text-slate-600 dark:text-slate-400">
                 {{ client.address || 'Sin dirección' }}
               </td>
 
-              <td class="px-6 py-4 text-center text-slate-300">
+              <td class="px-6 py-4 text-center text-slate-700 dark:text-slate-300">
                 {{ client.plan }}
               </td>
 
               <td class="px-6 py-4 text-center">
                 @if (client.status === 'Activo') {
-                  <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+                  <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-400">
                     Activo
                   </span>
                 } @else if (client.status === 'Pendiente') {
-                  <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
+                  <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-700 dark:text-amber-400">
                     Pendiente
                   </span>
                 } @else {
-                  <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400">
+                  <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-700 dark:text-red-400">
                     Suspendido
                   </span>
                 }
               </td>
 
-              <td class="px-6 py-4 text-center text-slate-400">
+              <td class="px-6 py-4 text-center text-slate-600 dark:text-slate-400">
                 {{ client.installationDate || 'Sin fecha' }}
               </td>
 
@@ -102,7 +102,7 @@
                       <button
                         type="button"
                         (click)="editClient(client)"
-                        class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-400 shadow-lg shadow-blue-500/20 transition hover:border-cyan-400/60 hover:text-cyan-300 hover:shadow-blue-500/30"
+                        class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-500/30 px-3 py-2 text-xs font-medium text-cyan-700 shadow-lg shadow-blue-500/10 transition hover:border-cyan-400/60 hover:text-cyan-600 hover:shadow-blue-500/20 dark:text-cyan-400 dark:shadow-blue-500/20 dark:hover:text-cyan-300 dark:hover:shadow-blue-500/30"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
                           fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -117,7 +117,7 @@
                       <button
                         type="button"
                         (click)="deleteClient(client)"
-                        class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-400 transition hover:border-red-400/60 hover:bg-red-500/10"
+                        class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-2 text-xs font-medium text-red-600 transition hover:border-red-400/60 hover:bg-red-500/10 dark:text-red-400"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
                           fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -137,8 +137,8 @@
                 [attr.colspan]="can('clients.edit') || can('clients.delete') ? 7 : 6"
                 class="px-6 py-12 text-center"
               >
-                <div class="text-slate-400">No se encontraron clientes.</div>
-                <div class="mt-1 text-sm text-slate-600">
+                <div class="text-slate-600 dark:text-slate-400">No se encontraron clientes.</div>
+                <div class="mt-1 text-sm text-slate-500 dark:text-slate-600">
                   Prueba con otro término de búsqueda.
                 </div>
               </td>
@@ -155,12 +155,12 @@
   <div
     class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/70 p-4"
   >
-    <div class="my-auto w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl">
+    <div class="my-auto w-full max-w-2xl rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
 
       <!-- Modal header -->
-      <div class="flex items-center justify-between border-b border-slate-800 px-6 py-5">
+      <div class="flex items-center justify-between border-b border-slate-200 px-6 py-5 dark:border-slate-800">
         <div>
-          <h2 class="text-lg font-semibold text-white">
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
             {{ editingClientId === null ? 'Nuevo cliente' : 'Editar cliente' }}
           </h2>
           <p class="mt-1 text-sm text-slate-500">
@@ -174,7 +174,7 @@
           type="button"
           (click)="closeForm()"
           aria-label="Cerrar formulario"
-          class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-800 hover:text-white"
+          class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
         >
           ✕
         </button>
@@ -189,7 +189,7 @@
 
         <!-- Name -->
         <div>
-          <label for="name" class="mb-2 block text-sm font-medium text-slate-300">
+          <label for="name" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Nombre completo *
           </label>
 
@@ -204,13 +204,14 @@
             maxlength="100"
             required
             [attr.aria-invalid]="!!validationErrors['name']"
-            class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+            class="w-full rounded-xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-cyan-500 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-600"
             [class.border-red-500]="validationErrors['name']"
-            [class.border-slate-700]="!validationErrors['name']"
+            [class.border-slate-300]="!validationErrors['name']"
+            [class.dark:border-slate-700]="!validationErrors['name']"
           />
 
           @if (validationErrors['name']) {
-            <p class="mt-1 text-xs text-red-400" role="alert">
+            <p class="mt-1 text-xs text-red-500 dark:text-red-400" role="alert">
               {{ validationErrors['name'] }}
             </p>
           }
@@ -219,7 +220,7 @@
         <!-- Email + phone -->
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
-            <label for="email" class="mb-2 block text-sm font-medium text-slate-300">
+            <label for="email" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Email *
             </label>
 
@@ -233,20 +234,21 @@
               maxlength="254"
               required
               [attr.aria-invalid]="!!validationErrors['email']"
-              class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+              class="w-full rounded-xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-cyan-500 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-600"
               [class.border-red-500]="validationErrors['email']"
-              [class.border-slate-700]="!validationErrors['email']"
+              [class.border-slate-300]="!validationErrors['email']"
+              [class.dark:border-slate-700]="!validationErrors['email']"
             />
 
             @if (validationErrors['email']) {
-              <p class="mt-1 text-xs text-red-400" role="alert">
+              <p class="mt-1 text-xs text-red-500 dark:text-red-400" role="alert">
                 {{ validationErrors['email'] }}
               </p>
             }
           </div>
 
           <div>
-            <label for="phone" class="mb-2 block text-sm font-medium text-slate-300">
+            <label for="phone" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Teléfono *
             </label>
 
@@ -260,13 +262,14 @@
               maxlength="20"
               required
               [attr.aria-invalid]="!!validationErrors['phone']"
-              class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+              class="w-full rounded-xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-cyan-500 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-600"
               [class.border-red-500]="validationErrors['phone']"
-              [class.border-slate-700]="!validationErrors['phone']"
+              [class.border-slate-300]="!validationErrors['phone']"
+              [class.dark:border-slate-700]="!validationErrors['phone']"
             />
 
             @if (validationErrors['phone']) {
-              <p class="mt-1 text-xs text-red-400" role="alert">
+              <p class="mt-1 text-xs text-red-500 dark:text-red-400" role="alert">
                 {{ validationErrors['phone'] }}
               </p>
             }
@@ -275,7 +278,7 @@
 
         <!-- Address -->
         <div>
-          <label for="address" class="mb-2 block text-sm font-medium text-slate-300">
+          <label for="address" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Dirección
           </label>
 
@@ -288,13 +291,14 @@
             placeholder="Calle, número, localidad..."
             maxlength="200"
             [attr.aria-invalid]="!!validationErrors['address']"
-            class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500"
+            class="w-full rounded-xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-cyan-500 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-600"
             [class.border-red-500]="validationErrors['address']"
-            [class.border-slate-700]="!validationErrors['address']"
+            [class.border-slate-300]="!validationErrors['address']"
+            [class.dark:border-slate-700]="!validationErrors['address']"
           />
 
           @if (validationErrors['address']) {
-            <p class="mt-1 text-xs text-red-400" role="alert">
+            <p class="mt-1 text-xs text-red-500 dark:text-red-400" role="alert">
               {{ validationErrors['address'] }}
             </p>
           }
@@ -303,7 +307,7 @@
         <!-- Plan + status -->
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
-            <label for="plan" class="mb-2 block text-sm font-medium text-slate-300">
+            <label for="plan" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Plan *
             </label>
 
@@ -313,9 +317,10 @@
               [(ngModel)]="newClient.plan"
               (ngModelChange)="clearValidationError('plan')"
               [attr.aria-invalid]="!!validationErrors['plan']"
-              class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+              class="w-full rounded-xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-cyan-500 dark:bg-slate-950 dark:text-white"
               [class.border-red-500]="validationErrors['plan']"
-              [class.border-slate-700]="!validationErrors['plan']"
+              [class.border-slate-300]="!validationErrors['plan']"
+              [class.dark:border-slate-700]="!validationErrors['plan']"
             >
               <option value="FTTH 300 Mbps">FTTH 300 Mbps</option>
               <option value="FTTH 600 Mbps">FTTH 600 Mbps</option>
@@ -324,14 +329,14 @@
             </select>
 
             @if (validationErrors['plan']) {
-              <p class="mt-1 text-xs text-red-400" role="alert">
+              <p class="mt-1 text-xs text-red-500 dark:text-red-400" role="alert">
                 {{ validationErrors['plan'] }}
               </p>
             }
           </div>
 
           <div>
-            <label for="status" class="mb-2 block text-sm font-medium text-slate-300">
+            <label for="status" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Estado *
             </label>
 
@@ -341,9 +346,10 @@
               [(ngModel)]="newClient.status"
               (ngModelChange)="clearValidationError('status')"
               [attr.aria-invalid]="!!validationErrors['status']"
-              class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+              class="w-full rounded-xl border bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-cyan-500 dark:bg-slate-950 dark:text-white"
               [class.border-red-500]="validationErrors['status']"
-              [class.border-slate-700]="!validationErrors['status']"
+              [class.border-slate-300]="!validationErrors['status']"
+              [class.dark:border-slate-700]="!validationErrors['status']"
             >
               <option value="Pendiente">Pendiente</option>
               <option value="Activo">Activo</option>
@@ -351,7 +357,7 @@
             </select>
 
             @if (validationErrors['status']) {
-              <p class="mt-1 text-xs text-red-400" role="alert">
+              <p class="mt-1 text-xs text-red-500 dark:text-red-400" role="alert">
                 {{ validationErrors['status'] }}
               </p>
             }
@@ -362,7 +368,7 @@
         <div>
           <label
             for="installationDate"
-            class="mb-2 block text-sm font-medium text-slate-300"
+            class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             Fecha de instalación
           </label>
@@ -375,13 +381,12 @@
             (ngModelChange)="clearValidationError('installationDate')"
             [max]="getTodayDate()"
             [attr.aria-invalid]="!!validationErrors['installationDate']"
-            class="w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-cyan-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
             [class.border-red-500]="validationErrors['installationDate']"
-            [class.border-slate-700]="!validationErrors['installationDate']"
           />
 
           @if (validationErrors['installationDate']) {
-            <p class="mt-1 text-xs text-red-400" role="alert">
+            <p class="mt-1 text-xs text-red-500 dark:text-red-400" role="alert">
               {{ validationErrors['installationDate'] }}
             </p>
           } @else {
@@ -392,11 +397,11 @@
         </div>
 
         <!-- Buttons -->
-        <div class="flex justify-end gap-3 border-t border-slate-800 pt-5">
+        <div class="flex justify-end gap-3 border-t border-slate-200 pt-5 dark:border-slate-800">
           <button
             type="button"
             (click)="closeForm()"
-            class="rounded-xl border border-slate-700 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-slate-800"
+            class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             Cancelar
           </button>

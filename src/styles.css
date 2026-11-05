@@ -1,3 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+/* Modo oscuro controlado por la clase .dark */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Apariencia del navegador */
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}

@@ -1,11 +1,12 @@
 
 import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { ThemeService } from '../../../core/services/theme.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { IncidentService } from '../../../core/services/incident.service';
 import { Incident } from '../../models/incident.model';
 import { User, UserRole } from '../../models/user.model';
+
 
 @Component({
   selector: 'app-header',
@@ -21,7 +22,10 @@ export class Header {
     private authService: AuthService,
     private router: Router,
     private incidentService: IncidentService,
-  ) {}
+    private themeService: ThemeService,
+  ) {
+     this.themeService.loadSavedTheme();
+  }
 
   get currentUser(): User | null {
     return this.authService.getCurrentUser();
@@ -229,13 +233,47 @@ export class Header {
     this.isUserMenuOpen = false;
   }
 
-  openSection(section: string): void {
-    this.closeUserMenu();
+ openSection(section: string): void {
+  console.log('Sección seleccionada:', section);
 
-    if (section === 'perfil') {
-      void this.router.navigate(['/perfil']);
-    }
+  this.closeUserMenu();
+
+  if (section === 'configuracion') {
+    this.router.navigate(['/configuracion']).then(
+      (success) => {
+        console.log('Navegación completada:', success);
+        console.log('URL actual:', this.router.url);
+      }
+    );
   }
+
+  if (section === 'perfil') {
+    this.router.navigate(['/perfil']).then(
+      (success) => {
+        console.log('Navegación completada:', success);
+        console.log('URL actual:', this.router.url);
+      }
+    );
+  }
+}
+
+testConfiguration(): void {
+  const parentRoute = this.router.config.find(
+    (route) => route.path === ''
+  );
+
+  console.log(
+    'Rutas hijas registradas:',
+    parentRoute?.children?.map((route) => ({
+      path: route.path,
+      component: route.component,
+      loadComponent: route.loadComponent,
+      redirectTo: route.redirectTo,
+    }))
+  );
+
+  void this.router.navigateByUrl('/configuracion');
+}
 
   logout(): void {
     this.closeUserMenu();

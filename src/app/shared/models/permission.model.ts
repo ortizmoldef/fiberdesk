@@ -1,3 +1,4 @@
+
 import { UserRole } from './user.model';
 
 export type Permission =
@@ -21,7 +22,9 @@ export type Permission =
   | 'users.view'
   | 'users.create'
   | 'users.edit'
-  | 'users.delete';
+  | 'users.delete'
+  | 'settings.view'
+  | 'settings.manage';
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   admin: [
@@ -46,6 +49,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'users.create',
     'users.edit',
     'users.delete',
+    'settings.view',
+    'settings.manage',
   ],
 
   technician: [
@@ -53,6 +58,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'installations.view',
     'incidents.view',
     'incidents.edit',
+    'settings.view',
   ],
 
   supervisor: [
@@ -61,5 +67,6 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'installations.view',
     'technicians.view',
     'incidents.view',
+    'settings.view',
   ],
 };

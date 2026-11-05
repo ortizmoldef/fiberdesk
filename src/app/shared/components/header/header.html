@@ -1,9 +1,10 @@
-<header class="flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-6 lg:px-8">
+
+<header class="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-6 transition-colors dark:border-slate-800 dark:bg-slate-950 lg:px-8">
 
   <!-- Título -->
   <div>
     <p class="text-sm text-slate-500">Gestión de red</p>
-    <h2 class="text-xl font-semibold text-white">FiberDesk</h2>
+    <h2 class="text-xl font-semibold text-slate-900 dark:text-white">FiberDesk</h2>
   </div>
 
   <!-- Acciones de la derecha -->
@@ -18,13 +19,13 @@
         [attr.aria-expanded]="isNotificationsOpen"
         aria-label="Notificaciones"
         aria-haspopup="true"
-        class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-800 hover:text-white"
+        class="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
       >
         <span class="text-xl">🔔</span>
 
         @if (notificationCount > 0) {
           <span
-            class="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white ring-2 ring-slate-950"
+            class="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white ring-2 ring-white dark:ring-slate-950"
           >
             {{ notificationCount > 99 ? '99+' : notificationCount }}
           </span>
@@ -34,14 +35,14 @@
       <!-- Panel de notificaciones -->
       @if (isNotificationsOpen) {
         <div
-          class="absolute right-0 top-full z-50 mt-3 w-[min(360px,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-2xl"
+          class="absolute right-0 top-full z-50 mt-3 w-[min(360px,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900"
           (click)="$event.stopPropagation()"
         >
 
           <!-- Cabecera del panel -->
-          <div class="flex items-center justify-between border-b border-slate-800 px-4 py-4">
+          <div class="flex items-center justify-between border-b border-slate-200 px-4 py-4 dark:border-slate-800">
             <div>
-              <h3 class="text-sm font-semibold text-white">
+              <h3 class="text-sm font-semibold text-slate-900 dark:text-white">
                 Notificaciones
               </h3>
 
@@ -51,23 +52,23 @@
               </p>
             </div>
 
-            <span class="rounded-lg bg-cyan-500/10 px-2.5 py-1 text-xs font-semibold text-cyan-400">
+            <span class="rounded-lg bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400">
               {{ notificationCount }}
             </span>
           </div>
 
-
-            @if (notificationCount > 0) {
-              <div class="border-b border-slate-800 px-4 pb-3">
-                <button
-                  type="button"
-                  (click)="markAllNotificationsAsRead()"
-                  class="text-xs font-medium text-cyan-400 transition hover:text-cyan-300"
-                >
-                  Marcar todas como leídas
-                </button>
-              </div>
-            }
+          <!-- Marcar todas como leídas -->
+          @if (notificationCount > 0) {
+            <div class="border-b border-slate-200 px-4 pb-3 dark:border-slate-800">
+              <button
+                type="button"
+                (click)="markAllNotificationsAsRead()"
+                class="text-xs font-medium text-cyan-700 transition hover:text-cyan-600 dark:text-cyan-400 dark:hover:text-cyan-300"
+              >
+                Marcar todas como leídas
+              </button>
+            </div>
+          }
 
           <!-- Lista de incidencias pendientes -->
           <div class="max-h-96 overflow-y-auto">
@@ -76,20 +77,22 @@
               <button
                 type="button"
                 (click)="openIncident(incident)"
-                class="flex w-full gap-3 border-b border-slate-800/70 px-4 py-4 text-left transition hover:bg-slate-800/70"
+                class="flex w-full gap-3 border-b border-slate-200/70 px-4 py-4 text-left transition hover:bg-slate-50 dark:border-slate-800/70 dark:hover:bg-slate-800/70"
               >
 
                 <!-- Icono según prioridad -->
                 <div
                   class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
                   [class.bg-red-500/10]="incident.priority === 'Crítica'"
-                  [class.text-red-400]="incident.priority === 'Crítica'"
+                  [class.text-red-500]="incident.priority === 'Crítica'"
                   [class.bg-orange-500/10]="incident.priority === 'Alta'"
-                  [class.text-orange-400]="incident.priority === 'Alta'"
+                  [class.text-orange-500]="incident.priority === 'Alta'"
                   [class.bg-amber-500/10]="incident.priority === 'Media'"
-                  [class.text-amber-400]="incident.priority === 'Media'"
-                  [class.bg-slate-800]="incident.priority === 'Baja'"
-                  [class.text-slate-400]="incident.priority === 'Baja'"
+                  [class.text-amber-500]="incident.priority === 'Media'"
+                  [class.bg-slate-100]="incident.priority === 'Baja'"
+                  [class.dark:bg-slate-800]="incident.priority === 'Baja'"
+                  [class.text-slate-500]="incident.priority === 'Baja'"
+                  [class.dark:text-slate-400]="incident.priority === 'Baja'"
                 >
                   <span class="text-lg">
                     {{ incident.priority === 'Crítica' ? '⚠' : '!' }}
@@ -100,26 +103,28 @@
                 <div class="min-w-0 flex-1">
 
                   <div class="flex items-start justify-between gap-2">
-                    <p class="text-sm font-medium text-white">
+                    <p class="text-sm font-medium text-slate-900 dark:text-white">
                       {{ incident.title }}
                     </p>
 
                     <span
                       class="shrink-0 rounded-md px-2 py-1 text-[10px] font-semibold"
                       [class.bg-red-500/10]="incident.priority === 'Crítica'"
-                      [class.text-red-400]="incident.priority === 'Crítica'"
+                      [class.text-red-500]="incident.priority === 'Crítica'"
                       [class.bg-orange-500/10]="incident.priority === 'Alta'"
-                      [class.text-orange-400]="incident.priority === 'Alta'"
+                      [class.text-orange-500]="incident.priority === 'Alta'"
                       [class.bg-amber-500/10]="incident.priority === 'Media'"
-                      [class.text-amber-400]="incident.priority === 'Media'"
-                      [class.bg-slate-800]="incident.priority === 'Baja'"
-                      [class.text-slate-400]="incident.priority === 'Baja'"
+                      [class.text-amber-500]="incident.priority === 'Media'"
+                      [class.bg-slate-100]="incident.priority === 'Baja'"
+                      [class.dark:bg-slate-800]="incident.priority === 'Baja'"
+                      [class.text-slate-500]="incident.priority === 'Baja'"
+                      [class.dark:text-slate-400]="incident.priority === 'Baja'"
                     >
                       {{ incident.priority }}
                     </span>
                   </div>
 
-                  <p class="mt-1 truncate text-xs text-slate-400">
+                  <p class="mt-1 truncate text-xs text-slate-600 dark:text-slate-400">
                     {{ incident.clientName }}
                   </p>
 
@@ -140,12 +145,13 @@
                 </div>
               </button>
             } @empty {
+
               <div class="px-5 py-10 text-center">
                 <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
-                  <span class="text-xl text-emerald-400">✓</span>
+                  <span class="text-xl text-emerald-500 dark:text-emerald-400">✓</span>
                 </div>
 
-                <p class="text-sm font-medium text-white">
+                <p class="text-sm font-medium text-slate-900 dark:text-white">
                   Todo está en orden
                 </p>
 
@@ -153,16 +159,17 @@
                   No hay incidencias pendientes.
                 </p>
               </div>
+
             }
 
           </div>
 
           <!-- Pie del panel -->
-          <div class="border-t border-slate-800 p-3">
+          <div class="border-t border-slate-200 p-3 dark:border-slate-800">
             <button
               type="button"
               (click)="openAllIncidents()"
-              class="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/10"
+              class="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-cyan-700 transition hover:bg-cyan-50 dark:text-cyan-400 dark:hover:bg-cyan-500/10"
             >
               Ver todas las incidencias
               <span>→</span>
@@ -175,57 +182,63 @@
     </div>
 
     <!-- Perfil y menú desplegable -->
-    <div class="relative border-l border-slate-800 pl-4">
+    <div class="relative border-l border-slate-200 pl-4 dark:border-slate-800">
 
       <button
         type="button"
         (click)="toggleUserMenu(); $event.stopPropagation()"
         [attr.aria-expanded]="isUserMenuOpen"
         aria-haspopup="true"
-        class="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-800"
+        class="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-100 dark:hover:bg-slate-800"
       >
+
         <div class="hidden text-right sm:block">
-          <p class="text-sm font-medium text-white">
-              {{ displayName }}
+          <p class="text-sm font-medium text-slate-900 dark:text-white">
+            {{ displayName }}
           </p>
+
           <p class="text-xs text-slate-500">
-              {{ displayRole }}
+            {{ displayRole }}
           </p>
         </div>
 
+        <!-- Iniciales del usuario -->
         <div
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/10 font-semibold text-cyan-400"
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/10 font-semibold text-cyan-700 dark:text-cyan-400"
         >
           {{ userInitials }}
         </div>
 
         <span
-          class="text-xs text-slate-400 transition"
+          class="text-xs text-slate-500 transition dark:text-slate-400"
           [class.rotate-180]="isUserMenuOpen"
         >⌄</span>
+
       </button>
 
+      <!-- Menú desplegable del usuario -->
       @if (isUserMenuOpen) {
         <div
-          class="absolute right-0 top-full z-50 mt-3 w-60 rounded-xl border border-slate-800 bg-slate-900 p-2 shadow-2xl"
+          class="absolute right-0 top-full z-50 mt-3 w-60 rounded-xl border border-slate-200 bg-white p-2 shadow-2xl dark:border-slate-800 dark:bg-slate-900"
           (click)="$event.stopPropagation()"
         >
 
           <!-- Cabecera del menú -->
-          <div class="border-b border-slate-800 px-3 py-3">
-              <p class="text-sm font-medium text-white">
-                {{ displayName }}
-              </p>
-              <p class="mt-1 text-xs text-slate-500">
-                {{ displayRole }}
-              </p>
-              </div>
+          <div class="border-b border-slate-200 px-3 py-3 dark:border-slate-800">
+            <p class="text-sm font-medium text-slate-900 dark:text-white">
+              {{ displayName }}
+            </p>
+
+            <p class="mt-1 text-xs text-slate-500">
+              {{ displayRole }}
+            </p>
+          </div>
 
           <!-- Mi perfil -->
           <button
             type="button"
             (click)="openSection('perfil')"
-            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
           >
             <span>♙</span>
             Mi perfil
@@ -234,8 +247,8 @@
           <!-- Configuración -->
           <button
             type="button"
-            (click)="openSection('configuracion')"
-            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+            (click)="testConfiguration()"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
           >
             <span>⚙</span>
             Configuración
@@ -245,19 +258,19 @@
           <button
             type="button"
             (click)="openSection('seguridad')"
-            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
           >
             <span>♧</span>
             Seguridad
           </button>
 
-          <div class="my-2 border-t border-slate-800"></div>
+          <div class="my-2 border-t border-slate-200 dark:border-slate-800"></div>
 
           <!-- Cerrar sesión -->
           <button
             type="button"
             (click)="logout()"
-            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-red-400 transition hover:bg-red-500/10"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-red-500 transition hover:bg-red-500/10"
           >
             <span>⇥</span>
             Cerrar sesión
