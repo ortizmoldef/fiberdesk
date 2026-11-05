@@ -30,17 +30,32 @@ Su objetivo es centralizar y simplificar la gestión de clientes, instalaciones,
 
 ## 🖥️ Capturas de pantalla
 
-<!-- Añade aquí tus capturas de pantalla -->
-<!-- Puedes guardarlas en una carpeta /screenshots -->
-
-| Dashboard | Gestión de clientes |
-|:---:|:---:|
-| ![Dashboard](<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/0d2c0a4a-4e5c-4c04-bf5b-df8c80902e12" />
-) | ![Clientes](screenshots/clientes.png) |
-
-| Modo oscuro | Modo claro |
-|:---:|:---:|
-| ![Modo oscuro](screenshots/modo-oscuro.png) | ![Modo claro](screenshots/modo-claro.png) |
+<table>
+  <tr>
+    <th align="center">Dashboard</th>
+    <th align="center">Gestión de clientes</th>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/0d2c0a4a-4e5c-4c04-bf5b-df8c80902e12" width="100%" alt="Dashboard">
+    </td>
+    <td width="50%">
+      <img src="screenshots/clientes.png" width="100%" alt="Gestión de clientes">
+    </td>
+  </tr>
+  <tr>
+    <th align="center">Modo oscuro</th>
+    <th align="center">Modo claro</th>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="screenshots/modo-oscuro.png" width="100%" alt="Modo oscuro">
+    </td>
+    <td width="50%">
+      <img src="screenshots/modo-claro.png" width="100%" alt="Modo claro">
+    </td>
+  </tr>
+</table>
 
 ## 🔐 Roles y permisos
 
