@@ -40,7 +40,7 @@ Su objetivo es centralizar y simplificar la gestión de clientes, instalaciones,
       <img src="https://github.com/user-attachments/assets/0d2c0a4a-4e5c-4c04-bf5b-df8c80902e12" width="100%" alt="Dashboard">
     </td>
     <td width="50%">
-      <img src="screenshots/clientes.png" width="100%" alt="Gestión de clientes">
+      <img width="1916" height="1073" alt="image" src="https://github.com/user-attachments/assets/f877979c-0620-4449-88f2-3ad735bcd537" />
     </td>
   </tr>
   <tr>
